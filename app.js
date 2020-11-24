@@ -9,6 +9,7 @@ const logger       = require('morgan');
 const path         = require('path');
 
 const session       = require('express-session');
+const app_name = require('./package.json').name;
 const MongoStore = require('connect-mongo')(session);
 
 mongoose
@@ -20,9 +21,6 @@ mongoose
     console.error('Error connecting to mongo', err)
   });
 
-const app_name = require('./package.json').name;
-const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
-
 const app = express();
 
 // Middleware Setup
@@ -31,13 +29,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Express View engine setup
-
-app.use(require('node-sass-middleware')({
-  src:  path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public'),
-  sourceMap: true
+// ADD CORS SETTINGS HERE TO ALLOW CROSS-ORIGIN INTERACTION:
+const cors = require('cors');
+app.use(cors({
+  credentials: true,
+  origin: ['http://localhost:3000']
 }));
+
 
 // Enable authentication using session + passport
 app.use(session({
@@ -49,35 +47,74 @@ app.use(session({
 require('./passport')(app);
 app.use('/api', require('./routes/auth-routes'));
 app.use('/api', require('./routes/fileUploader'));
-
-app.use(express.static(path.join(__dirname, 'public')));
-
-// ADD SESSION SETTINGS HERE:
-app.use(session({
-  secret:"some secret goes here",
-  resave: true,
-  saveUninitialized: true
-}));
+// const dashboard = require('./routes/dashboard');
+// app.use('/dashboard', dashboard);
+app.use('/api', require('./routes/bugs'))
 
 
-// ADD CORS SETTINGS HERE TO ALLOW CROSS-ORIGIN INTERACTION:
-const cors = require('cors');
-app.use(cors({
-  credentials: true,
-  origin: '*'
-}));
+// const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
 
 
-const index = require('./routes/index');
-app.use('/', index);
 
 
-// Middleware error
+// Express View engine setup
+
+// app.use(require('node-sass-middleware')({
+//   src:  path.join(__dirname, 'public'),
+//   dest: path.join(__dirname, 'public'),
+//   sourceMap: true
+// }));
+
+//
+// After routes: static server || React SPA
+//
+
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// route not-found => could be a React route => render the SPA
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, 'client/build/index.html'), function (err) {
+    if (err) {
+      next(err)
+    }
+  })
+});
+
+
 app.use((err, req, res, next) => {
+  function er2JSON(er) {
+    // http://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify#18391212
+    var o = {};
+  
+    Object.getOwnPropertyNames(er).forEach(function (key) {
+      o[key] = er[key];
+    });
+  
+    return o;
+  }
+
   // always log the error
   console.error('ERROR', req.method, req.path, err);
 
-  res.json({message: err.message})
+  err = er2JSON(err);
+  err.status || (err.status = 500); // default to 500
+  res.status(err.status);
+
+  res.json(err);
 });
+
+
+
+
+
+
+
+// Middleware error
+// app.use((err, req, res, next) => {
+//   // always log the error
+//   console.error('ERROR', req.method, req.path, err);
+
+//   res.json({message: err.message})
+// });
 
 module.exports = app;

@@ -1,22 +1,21 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
-const mongoose = require('mongoose')
 const passport = require('passport');
-const { body, check, validationResult } = require('express-validator');
-
+const router = express.Router();
 const User = require('../models/User.model.js');
 const Service = require("../models/Services.model.js");
 
-const router = express.Router();
+const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
+const { body, check, validationResult } = require('express-validator');
 
 
-router.post('/login', (req, res, next) => {
-  const { email, password } = req.body
-  passport.authenticate("local", (err, theUser, failureDetails) =>{
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, theUser, failureDetails) => {
     if (err) {
       res.status(500).json({message: 'Something went wrong authenticating user'});
       return;
     }
+  
     if (!theUser) {
       res.status(401).json(failureDetails); // `failureDetails` contains the error messages from our logic in "LocalStrategy" {message: '…'}.
       return;
@@ -28,49 +27,15 @@ router.post('/login', (req, res, next) => {
         res.status(500).json({message: 'Session save went bad.'});
         return;
       }
+
       // We are now logged in (thats why we can also send req.user)
       res.status(200).json(theUser);
+      console.log(req.user)
     });
   })(req, res, next);
-})
+});
 
-
-//   const { email, password } = req.body
-
-//   // return si email et email sont vides
-//   if (!email || !password) {
-//     res.render('auth/login', {
-//       errorMessage: 'Please enter both, email and password to login.'
-//     });
-//     return; // STOP
-//   }
-//   // Sinon:
-//   User.findOne({ email: email })
-//     .populate('service')
-//     .then(user => {
-//       if (!user) {
-//         res.status(400).json({message: 'Incorrect email/password' })
-//         return; // STOP
-//       }
-
-//       // comparer le password fourni avec le password (hashé) en base
-//       if (bcrypt.compareSync(password, user.passwordHash)) {
-//         console.log('user ok', user)
-//         req.session.currentUser = user
-//         res.json(user)
-//       } else {
-//         res.status(400).json({message: 'Incorrect email/password' })
-//       }
-//     })
-//     .catch(err => {
-//       next(err)
-//     })
-
-// })
-
-
-
-router.get("/signup", (req, res, next) => {
+router.get("/findServices", (req, res, next) => {
   Service.find({})
     .populate('service')
     .then(servicesFromDB => {
@@ -95,7 +60,7 @@ router.post('/signup', [
   const validationErrors = validationResult(req);
   if (req.body.password != req.body.confirmPassword) {
     
-    return res.status(400).json({message: ['password and confirm password fields are not identical.']})
+    return res.status(400).json({message: ['password and confirm password are not identical.']})
   }
   if (!validationErrors.isEmpty()) {
     return res.status(400).json({message: validationErrors.errors.map(e => e.msg)})
@@ -128,7 +93,7 @@ router.post('/signup', [
 
 router.get("/logout", (req, res) => {
   req.logout();
-  res.status(204).send({ message: 'logged out with success!' });
+  res.status(204).send();
 });
 
 router.get("/loggedin", (req, res, next) => {
@@ -139,6 +104,41 @@ router.get("/loggedin", (req, res, next) => {
 
   res.status(403).json({message: 'Unauthorized'});
 });
+
+router.post("/edit", (req, res, next) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: "You need to be logged in to edit your profile"});
+    return;
+  }
+
+  // Updating `req.user` with each `req.body` field (excluding some internal fields `cannotUpdateFields`)
+  const cannotUpdateFields = ['_id', 'password'];
+  Object.keys(req.body).filter(key => cannotUpdateFields.indexOf(key) === -1).forEach(key => {
+    req.user[key] = req.body[key];
+  });
+
+  // Validating user with its new values (see: https://mongoosejs.com/docs/validation.html#async-custom-validators)
+  req.user.validate(function (error) {
+    if (error) {
+      // see: https://mongoosejs.com/docs/validation.html#validation-errors
+      res.status(400).json({message: error.errors});
+      return;
+    }
+
+    // Validation ok, let save it
+    req.user.save(function (err) {
+      if (err) {
+        res.status(500).json({message: 'Error while saving user into DB.'});
+        return;
+      }
+
+      res.status(200).json(req.user);
+    })
+  });
+
+});
+
 
 module.exports = router;
 

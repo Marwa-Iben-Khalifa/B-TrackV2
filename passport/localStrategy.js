@@ -1,14 +1,14 @@
+const mongoose = require('mongoose');
 const passport      = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User          = require('../models/User.model');
 const bcrypt        = require('bcrypt');
 
 passport.use(new LocalStrategy({
-    emailField: 'email',
-    passwordField: 'password'
-  }, 
-  (email, password, done) => {
-    User.findOne({email})
+  usernameField: 'email',
+  passwordField: 'password',
+  },(email, password, done) => {
+    User.findOne({ email })
     .populate('service')
     .then(foundUser => {
       if (!foundUser) {
@@ -21,7 +21,7 @@ passport.use(new LocalStrategy({
         return;
       }
 
-      done(null, foundUser);
+      return done(null, foundUser);
     })
     .catch(err => done(err));
   }

@@ -9,7 +9,7 @@ body {
   display: flex;
   font-weight: 400;
   font-family: sans-serif;
-  background: linear-gradient(to right,  #131111, #373638, #504f4f); 
+  /* background: linear-gradient(to right,  #131111, #373638, #504f4f);  */
 }
 
 body, html, .App, #root, .outer {
@@ -67,3 +67,7 @@ body, html, .App, #root, .outer {
 
 .form-elegant .modal-body, .form-elegant .modal-footer {
     font-weight: 400; }
+
+/* Jumbotron{
+  background: linear-gradient(to right,  #131111, #373638, #504f4f);
+  } */
