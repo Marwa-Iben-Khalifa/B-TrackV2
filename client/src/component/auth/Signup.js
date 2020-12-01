@@ -21,8 +21,12 @@ export default class Signup extends Component {
       confirmPassword: "",
       imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp",
       errorMessage:[],
-      listOfServices:[]          
+      listOfServices:[]
     };
+
+    
+  
+    
   
     getAllServices = () =>{
       axios.get(`http://localhost:3001/api/findServices`)
@@ -39,15 +43,13 @@ export default class Signup extends Component {
   
   handleFormSubmit = (event) => {
     event.preventDefault();
-    // const {firstname, lastname, service, role, email, password, confirmPassword, imageURL} =this.state;
-
 
     service.signup(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.email, this.state.password, this.state.confirmPassword, this.state.imageURL)
     .then(() => {      
       // 2. then, update with user infos
       service.edit(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.password, this.state.confirmPassword, this.state.imageURL)
       .then(response => {
-        this.setState({errorMessage: ""});
+        // this.setState({errorMessage: ""});
         this.setState({firstname: "", lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[] });
 
         this.props.updateUser(response);
@@ -76,6 +78,8 @@ export default class Signup extends Component {
     });
 
   }
+
+  
 
 
   render() {
@@ -182,7 +186,7 @@ export default class Signup extends Component {
                   </Modal.Body>
                   
                     <div className="modal-footer justify-content-center mb-3">
-                      <Button type="submit" size="lg" className="btn blue-gradient btn-block btn-rounded z-depth-1a ">Register<i className="fas fa-paper-plane-o ml-1"></i></Button>
+                      <Button type="submit" size="lg" className="btn blue-gradient btn-block btn-rounded z-depth-1a " style={{backgroundColor: "white"}}>Register<i className="fas fa-paper-plane-o ml-1"></i></Button>
                       <Button type="reset" className="btn btn-black">Reset</Button>
                     </div>
                   <Modal.Footer> 

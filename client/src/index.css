@@ -8,8 +8,7 @@ body {
   min-height: 100vh;
   display: flex;
   font-weight: 400;
-  font-family: sans-serif;
-  /* background: linear-gradient(to right,  #131111, #373638, #504f4f);  */
+  font-family: "Roboto",sans-serif;
 }
 
 body, html, .App, #root, .outer {
@@ -26,7 +25,6 @@ body, html, .App, #root, .outer {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  text-align: left;
 }
 
 .inner {
@@ -45,7 +43,6 @@ body, html, .App, #root, .outer {
 }
 
 .outer h3 {
-  text-align: center;
   margin: 0;
   line-height: 1;
   padding-bottom: 20px;
@@ -68,6 +65,13 @@ body, html, .App, #root, .outer {
 .form-elegant .modal-body, .form-elegant .modal-footer {
     font-weight: 400; }
 
-/* Jumbotron{
-  background: linear-gradient(to right,  #131111, #373638, #504f4f);
-  } */
+.vertical-timeline:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 18px;
+  height: 100%;
+  width: 4px;
+  background:rgba(248, 249, 250);
+}
+

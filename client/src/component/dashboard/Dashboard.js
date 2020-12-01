@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
+import axios from 'axios';
 import Popin from '../Popin.js';
 import service from '../api/service';
 import { Redirect } from 'react-router-dom';
 
 
 export default class Dashboard extends Component {
+  
 
   logout = (event) => {
     service.logout()
@@ -25,21 +27,21 @@ export default class Dashboard extends Component {
   // ;
   // }
 
+
+
   render() {
     return (
       <>
         {!this.props.user._id ? (
           <Redirect to="/" />
         ) : (
-          <Popin  key={this.props.user._id} one={(
+          <Popin  one={(
             <>
               <div className="cta">
                 <button className="btn logout" onClick={this.logout}>Logout</button>
               </div>
-            </>
-          )} two={(
-            <>
-              hello
+            
+              
             </>
           )} />
         )}

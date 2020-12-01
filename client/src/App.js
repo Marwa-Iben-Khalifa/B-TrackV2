@@ -9,6 +9,9 @@ import Signup from './component/auth/Signup'
 import Login from './component/auth/Login'
 import Dashboard from './component/dashboard/Dashboard'
 import service from './component/api/service'
+import NewBug from './component/bug/NewBug'
+import BugDetails from './component/bug/BugDetails'
+import BugsList from './component/bug/BugsList'
 
 
 export default class App extends Component {
@@ -56,6 +59,18 @@ export default class App extends Component {
 
           <Route exact path="/dashboard" render={(props) => (
             <Dashboard user={this.state.user} updateUser={this.updateUser} history={props.history} />
+          )} />
+
+          <Route exact path="/new-bug" render={(props) => (
+            <NewBug user={this.state.user}  history={props.history} />
+          )} />
+
+          <Route exact path="/:id/bug-details" render={(props) => (
+            <BugDetails user={this.state.user}  history={props.history} {...props} />
+          )} />
+          
+          <Route exact path="/bugs-list" render={(props) => (
+            <BugsList user={this.state.user}  history={props.history}  />
           )} />
 
           {/* last route, ie: 404 */}

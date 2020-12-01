@@ -8,27 +8,35 @@ const Service = require('../models/Services.model.js');
 const routeGuard = require('../configs/route-guard.config.js');
 const moment = require('moment')
 
+
+// const solutions = sortedSolutions.map(s => {
+        
+//   return{ s, date: {
+//     rapportDayS: moment(s.date).format('ll'),
+//     rapportTimeS: moment(s.date).format('LT'),
+//   }}
+// })
+
+
+
+
 // route d'affichege de la dashboard:
-router.get('/', routeGuard, (req, res, next) => {
-  let user = req.session.user;
-  Bug.find({})
+router.get('/display-bugs', (req, res, next) => {
+  Bug.find()
     .populate('rapporter')
     .then(allBugsFromDB => {
       const bugs = allBugsFromDB.map(bug => {
-        const normalizedBug = {
-          ...bug,
+        return {bug ,
           rapportedAt: {
             rapportDay: moment(bug.rapportedAt).format('ll'),
             rapportTime: moment(bug.rapportedAt).format('LT')
           }
         }
-
-        res.json( normalizedBug)
       })
-      .catch(err => {
-        res.json(err);
-      })
-
+      res.status(201).json(bugs)
+    })
+    .catch(err => {
+      res.json(err);
     })
 
 })
@@ -36,7 +44,7 @@ router.get('/', routeGuard, (req, res, next) => {
 
 
 // route de supprission de Bug
-router.get('/:id/delete', routeGuard, (req, res, next) => {
+router.get('/:id/delete', (req, res, next) => {
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: 'Specified id is not valid' });
     return;
