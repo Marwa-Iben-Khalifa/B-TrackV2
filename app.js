@@ -48,8 +48,9 @@ require('./passport')(app);
 app.use('/api', require('./routes/auth-routes'));
 app.use('/api', require('./routes/fileUploader'));
 const dashboard = require('./routes/dashboard');
-app.use('/api', dashboard);
-app.use('/api', require('./routes/bugs'))
+app.use('/dashboard', dashboard);
+app.use('/api', require('./routes/bugs'));
+app.use('/api', require ('./routes/services'))
 
 
 // const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
