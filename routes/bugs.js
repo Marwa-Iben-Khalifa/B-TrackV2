@@ -13,8 +13,7 @@ const routeGuard = require('../configs/route-guard.config');
 
 
 // details du bug
-router.get('/:id/details', routeGuard, (req, res, next) => {
-  let user = req.user;
+router.get('/:id/details', (req, res, next) => {
   Bug.findById(req.params.id)
     .populate('rapporter')
     .populate('solutions.user_id')
@@ -23,22 +22,20 @@ router.get('/:id/details', routeGuard, (req, res, next) => {
       const sortedSolutions = result.solutions.sort((s1, s2) => s2.date - s1.date) // sort solution by date 
       // transform the result to get well formated dates
       const solutions = sortedSolutions.map(s => {
-        const solution = {
-          ...s, date: {
-            rapportDay: moment(s.date).format('ll'),
-            rapportTime: moment(s.date).format('LT'),
-          }
-        }
-        return solution
+        
+          return{ s, date: {
+            rapportDayS: moment(s.date).format('ll'),
+            rapportTimeS: moment(s.date).format('LT'),
+          }}
       })
       const bug = {
-        ...result, rapportedAt: {
+        result, rapportedAt: {
           rapportDay: moment(result.rapportedAt).format('ll'),
           rapportTime: moment(result.rapportedAt).format('LT')
         },
         solutions
       }
-      res.status(201).json(solutions[0].__parentArray)
+      res.status(201).json(bug)
       
     })
 
@@ -50,7 +47,7 @@ router.get('/:id/details', routeGuard, (req, res, next) => {
 
 
 // ajouter solution
-router.post("/:id/solution", routeGuard,
+router.post("/:id/solution",
   check('solution')
   .notEmpty().withMessage('A solution must not be empty')
   .isLength({ max: 500 }).withMessage('A solution must not exceed 500 chars long.')
@@ -79,22 +76,6 @@ router.post("/:id/solution", routeGuard,
     }
   }
 )
-
-
-
-// rendre services 
-router.get("/services-for-bug", routeGuard, (req, res, next) => {
-  let user = req.user;
-  Service.find({})
-    .then(servicesFromDB => {
-      res.status(200).json({ servicesFromDB, user, errors: req.session.errors })
-      req.session.errors = undefined;
-    })
-    .catch(err => {
-      res.json(err);
-    })
-});
-
 
 
 // Create new bug

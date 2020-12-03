@@ -11,7 +11,7 @@ import Popin from '../Popin.js';
 
 export default class Signup extends Component {
     // fileInput = React.createRef();
-    /*state = { 
+    state = { 
       firstname: "",
       lastname: "" ,
       service: "",
@@ -21,21 +21,12 @@ export default class Signup extends Component {
       confirmPassword: "",
       imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp",
       errorMessage:[],
-      listOfServices:[]          
-    };*/
-    state = {
-      firstname: "",
-      lastname: "" ,
-      service: "",
-      role: "" ,
-      email: "" ,
-      password: "" ,
-      confirmPassword: "",
-      imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp",
-      errorMessage: [],
-      listOfServices:[] 
+      listOfServices:[]
+    };
 
-    }
+    
+  
+    
   
     getAllServices = () =>{
       axios.get(`http://localhost:3001/api/findServices`)
@@ -52,16 +43,14 @@ export default class Signup extends Component {
   
   handleFormSubmit = (event) => {
     event.preventDefault();
-    // const {firstname, lastname, service, role, email, password, confirmPassword, imageURL} =this.state;
-
 
     service.signup(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.email, this.state.password, this.state.confirmPassword, this.state.imageURL)
     .then(() => {      
       // 2. then, update with user infos
       service.edit(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.password, this.state.confirmPassword, this.state.imageURL)
       .then(response => {
-        //this.setState({errorMessage: ""});
-        this.setState({firstname: "",lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[] });
+        // this.setState({errorMessage: ""});
+        this.setState({firstname: "", lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[] });
 
         this.props.updateUser(response);
         // this.props.history.push('/');
@@ -90,9 +79,7 @@ export default class Signup extends Component {
 
   }
 
-  handleReset = (event) => {
-    this.setState({firstname: "",lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[]})
-  }
+  
 
 
   render() {

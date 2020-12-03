@@ -63,5 +63,20 @@ export default{
     return this.service.post('/upload', formdata)
       .then(response => response.data)
       .catch(errorHandler);
+  },
+
+  newBug(title, description, solution, services, status, severity){
+    return this.service.post('/create-bug', {
+      title, 
+      description, 
+      solution, 
+      services, 
+      status, 
+      severity 
+    })
+    .then(response => response.data)
+    .catch(errorHandler);
   }
+
+  
 }
