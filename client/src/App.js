@@ -9,6 +9,7 @@ import Signup from './component/auth/Signup'
 import Login from './component/auth/Login'
 import Dashboard from './component/dashboard/Dashboard'
 import service from './component/api/service'
+import CRUDServices from './apiServices/CRUDServices'
 
 
 export default class App extends Component {
@@ -57,6 +58,11 @@ export default class App extends Component {
           <Route exact path="/dashboard" render={(props) => (
             <Dashboard user={this.state.user} updateUser={this.updateUser} history={props.history} />
           )} />
+          
+          <Route exact path="/services" render={(props) => (
+            <CRUDServices user={this.state.user} updateUser={this.updateUser} history={props.history} />
+          )} />
+
 
           {/* last route, ie: 404 */}
           <Route render={() => (<h1>Not Found</h1>)} />
