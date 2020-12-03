@@ -11,7 +11,7 @@ import Popin from '../Popin.js';
 
 export default class Signup extends Component {
     // fileInput = React.createRef();
-    state = { 
+    /*state = { 
       firstname: "",
       lastname: "" ,
       service: "",
@@ -22,7 +22,20 @@ export default class Signup extends Component {
       imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp",
       errorMessage:[],
       listOfServices:[]          
-    };
+    };*/
+    state = {
+      firstname: "",
+      lastname: "" ,
+      service: "",
+      role: "" ,
+      email: "" ,
+      password: "" ,
+      confirmPassword: "",
+      imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp",
+      errorMessage: [],
+      listOfServices:[] 
+
+    }
   
     getAllServices = () =>{
       axios.get(`http://localhost:3001/api/findServices`)
@@ -47,8 +60,8 @@ export default class Signup extends Component {
       // 2. then, update with user infos
       service.edit(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.password, this.state.confirmPassword, this.state.imageURL)
       .then(response => {
-        this.setState({errorMessage: ""});
-        this.setState({firstname: "", lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[] });
+        //this.setState({errorMessage: ""});
+        this.setState({firstname: "",lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[] });
 
         this.props.updateUser(response);
         // this.props.history.push('/');
@@ -77,6 +90,10 @@ export default class Signup extends Component {
 
   }
 
+  handleReset = (event) => {
+    this.setState({firstname: "",lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[]})
+  }
+
 
   render() {
     return (
@@ -86,10 +103,8 @@ export default class Signup extends Component {
         ) : (
           <Popin  one={(
             <>
-              <Modal className="modal fade " id="orangeModalSubscription" tabIndex="-1" role="dialog" show={true}  >
-                  
-                <Form className="modal-content form-elegant" onSubmit={this.handleFormSubmit}>
-                  
+              <Modal className="modal fade" id="orangeModalSubscription" tabIndex="-1" role="dialog" show={true} style={{backgroundColor:"#515ea261"}} >
+                <Form className="modal-content form-elegant container-fluid " onSubmit={this.handleFormSubmit} onReset={this.handleReset}> 
                   <Modal.Header className="modal-header text-center">
                     <h4 className="modal-title  w-100 font-weight-bold py-2" style={{color:"#0e3662" , fontSize:"40px"}}>Sign up</h4>
                     <Link className="close" to="/"> X </Link> 
@@ -102,6 +117,7 @@ export default class Signup extends Component {
                       ))} 
                     </div>
                   )}
+                
                   
                   <Modal.Body className="modal-body">
                       
@@ -111,8 +127,8 @@ export default class Signup extends Component {
                         <input  type="text" name="firstname" placeholder="Firstname" className="form-control validate " id="inputFirstName"  value={this.state.firstname} onChange={this.handleChange} />
                         <label htmlFor="inputFirstName"></label>
 
-                      </FormGroup>
-                      <FormGroup className="md-form mb-2">
+                      </FormGroup> 
+                      <FormGroup className="md-form mb-2 ml-4">
                         <i className="fa fa-user prefix grey-text"></i>
                         <input type="text" name="lastname" placeholder="Lastname" className="form-control validate" id="inputLastname" value={this.state.lastname} onChange={this.handleChange} />
                         <label htmlFor="inputLastname"></label>
@@ -120,20 +136,20 @@ export default class Signup extends Component {
                     </Row>
                     
                     <Row>
-                      <FormGroup className="md-form mb-2">
+                      <FormGroup className="md-form mb-2 form-control" style={{border:"none"}}>
                         <i className="fa fa-envelope prefix grey-text"></i>
-                        <input type="email" name="email" placeholder="Email adress" className="form-control validate" id="inputEmail"  value={this.state.email} onChange={this.handleChange} />
+                        <input type="email" name="email" placeholder="Email adress" className=" validate " id="inputEmail"  value={this.state.email} onChange={this.handleChange}  />
                         <label data-error="wrong" data-success="right" htmlFor="inputEmail"></label>
                       </FormGroup>
                     </Row>
                     
                     <Row>
                       <FormGroup className="md-form mb-2">
-                        <i className="fas fa-lock prefix grey-text"></i>
+                        <i className="fa fa-lock prefix grey-text"></i>
                         <input type="password" name="password" placeholder="Password" className="form-control validate" id="inputPassword"  value={this.state.password} onChange={this.handleChange}/>
                         <label htmlFor="inputPassword"></label>
                       </FormGroup>
-                      <FormGroup className="md-form mb-2">
+                      <FormGroup className="md-form mb-2 ml-4">
                         <i className="fas fa-lock prefix grey-text"></i>
                         <input type="password" name="confirmPassword" className="form-control validate" id="inputConfirmPassword"
                           value={this.state.confirmPassword} placeholder="Confirm Password" onChange={this.handleChange} />
@@ -142,23 +158,17 @@ export default class Signup extends Component {
                     </Row>
 
                     <Row>
-                      <FormGroup className="md-form mb-2">                  
+                      <FormGroup className="md-form mb-5 custom-file" >                  
                         <i className="fa fa-camera prefix grey-text"></i>
-                        <Form.File type="file" className="custom-file-input" id="input-image"  onChange={this.handelUpload} />
+                        <Form.File for="input-image"type="file" name="input-image" className="custom-file-input" id="input-image"  onChange={this.handelUpload} />
                         <label htmlFor="input-image">Choose Avatar</label>                  
                       </FormGroup>
                     </Row>
 
                     <Row>
-                      <Form.Control as="select"
-                          className="mr-sm-2 mt-2"
-                          id="inlineFormCustomSelect" 
-                          value={this.state.service}
-                          name="service"
-                          id="inputService"
-                          onChange={(this.handleChange)}
-                          custom>
-                            {/* afficher tous les service dans une boite select */}
+                      <Form.Control as="select" className="mr-sm-2 mt-2" id="inlineFormCustomSelect" value={this.state.service} name="service" id="inputService" onChange={(this.handleChange)} style={{border:"none", borderBottom: "1px solid #D9DEE0"}} custom>
+                            {/* afficher tous les services dans une boite select */}
+                            <option value="">Service</option>
                             {this.state.listOfServices.map( service => {
                               return (
                                 <option key={service._id} value={service._id}>{service.name}</option>
@@ -166,30 +176,22 @@ export default class Signup extends Component {
                             } 
                       </Form.Control>
                       <Form.Control as="select"
-                        className="mr-sm-2 mt-2"
-                        id="inlineFormCustomSelect" 
-                        value={this.state.role}
-                        name="role"
-                        id="inputRole"
-                        onChange={this.handleChange}
-                        custom>
-                        <option value="">Choose Role...</option>
+                        className="mr-sm-2 mt-2" id="inlineFormCustomSelect" value={this.state.role} name="role" id="inputRole" onChange={this.handleChange} style={{border:"none", borderBottom: "1px solid #D9DEE0"}} custom>
+                        <option value="">Role</option>
                         <option value="manager">Manager</option>
                         <option value="employee">Employee</option>
                         <option value="validator">Validator</option>                    
                       </Form.Control>
                     </Row>
-                  </Modal.Body>
                   
-                    <div className="modal-footer justify-content-center mb-3">
-                      <Button type="submit" size="lg" className="btn blue-gradient btn-block btn-rounded z-depth-1a ">Register<i className="fas fa-paper-plane-o ml-1"></i></Button>
-                      <Button type="reset" className="btn btn-black">Reset</Button>
+                    <div className="modal-footer justify-content-center mb-3 mt-3">
+                      <Button type="submit" size="lg" className="btn-block btn-outline-secondary" style={{fontWeight: "bold"}}>Register</Button>
+                      <Button type="reset" className="btn btn-rounded btn-black " style={{backgroundColor:"#3f51b552"}}>Reset</Button>
                     </div>
-                  <Modal.Footer> 
-                  Already registered <Link to="/login">Log in</Link>
-                  </Modal.Footer>
-                </Form>
                   
+                    Already registered <Link to="/login">Log in</Link>
+                  </Modal.Body>
+                </Form>  
               </Modal>
             </>
           )} />

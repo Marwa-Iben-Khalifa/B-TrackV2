@@ -36,7 +36,7 @@ export default class App extends Component {
 
   render(){
   return (
-    <div className="App">
+    <div className="App" style= {{background: "#3f51b50d"}}>
       <BrowserRouter>          
       <Route render={props => (
       <div className="App" data-route={props.location.pathname}> {/* data-route="/" allow us to style pages */}

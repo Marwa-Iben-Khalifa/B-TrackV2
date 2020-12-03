@@ -67,6 +67,14 @@ body, html, .App, #root, .outer {
 
 .form-elegant .modal-body, .form-elegant .modal-footer {
     font-weight: 400; }
+  
+ .btn-outline-secondary {
+      color: #a6c !important;
+      background-color: transparent !important;
+      border: 2px solid #a6c !important;
+  }
+  
+  
 
 /* Jumbotron{
   background: linear-gradient(to right,  #131111, #373638, #504f4f);
