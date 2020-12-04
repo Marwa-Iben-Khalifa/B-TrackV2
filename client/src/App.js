@@ -10,6 +10,9 @@ import Login from './component/auth/Login'
 import Dashboard from './component/dashboard/Dashboard'
 import service from './component/api/service'
 import CRUDServices from './apiServices/CRUDServices'
+import NewBug from './component/bug/NewBug'
+import BugDetails from './component/bug/BugDetails'
+import BugsList from './component/bug/BugsList'
 
 
 export default class App extends Component {
