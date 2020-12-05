@@ -11,7 +11,7 @@ const routeGuard = require('../configs/route-guard.config');
 
 
 
-// route d'affichege de la dashboard:
+// route d'affichege de liste des bugs:
 router.get('/display-bugs', (req, res, next) => {
   Bug.find()
     .populate('rapporter')
@@ -108,7 +108,7 @@ router.post("/:id/solution",
     } else {
       Bug.findById(bugId)
         .then(bug => {
-          res.status(400).json({bug, errors: validationErrors.errors.map(e => e.msg)});
+          res.status(400).json({bug, message: validationErrors.errors.map(e => e.msg)});
         })
     }
   }

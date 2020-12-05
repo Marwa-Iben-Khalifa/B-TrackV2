@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import service from '../api/service';
+import srv from '../api/service';
+import { Button, Modal, Form, FormGroup, Row, Alert } from 'react-bootstrap';
 
-import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 
-import { Button, Modal, Form, FormGroup, Row, Alert } from 'react-bootstrap';
+
 import { Link } from 'react-router-dom';
 
 
@@ -18,19 +18,21 @@ export default class BugDetails extends React.Component {
     solutions: [],
     services: [],
     rapporter: {},
-    show: false,
+    
     status: "",
     severity: "",
     solution: "",
-    errorMessage:[]
+    errorMessage:[],
+    show: false
   };
 
 
 
   getBugFromApi = () => {
     const { params } = this.props.match;
-    service.service.get(`/${params.id}/details`)
+    srv.service.get(`/${params.id}/details`)
       .then(response => {
+        console.log('coucou', response.data)
         this.setState({
           bug: response.data.result,
           rapportedAt: response.data.rapportedAt,
@@ -58,14 +60,14 @@ export default class BugDetails extends React.Component {
 
   handleFormSubmit= (event)=>{
     event.preventDefault();
-    const status= this.state.status;
-    const severity= this.state.severity;
-    const solution= this.state.solution;
+    const {status, severity, solution}= this.state;
     const { params } = this.props.match;
-    service.service.post(`/${params.id}/solution`, {status, severity, solution})
-      .then(() => { 
-        this.getBugFromApi() 
+    srv.service.post(`/${params.id}/solution`, {status, severity, solution})
+      .then(() => {
         this.setState({status: "", severity: "", solution: "",errorMessage:[], show: false});
+        this.getBugFromApi() 
+        this.props.history.push(`/${params.id}/bug-details`);
+        console.log('hello', this.state)
       })
       .catch((error)=> this.setState({errorMessage:error.response.data.message}))
 
@@ -193,19 +195,27 @@ export default class BugDetails extends React.Component {
             </div>
           </div>
         </div>
-
-        <Modal className="modal fade " id="addSolutionModal" tabIndex="-1" role="dialog" show={this.state.show} >
+        <Modal className="modal fade " id="addSolutionModal" tabIndex="-1" role="dialog" show={this.state.show}>
           <div className="modal-content">
-            <Modal.Header className="modal-header text-center">
-              <h5 className="modal-title" id="addSolutionModalLabel">Add solution</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false})}>
-                <span aria-hidden="false">&times;</span>
+            <div className="modal-header">
+              <h5 className="modal-title" id="addSolutionModalLabel">Edit Service</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false, errorMessageEdit:[], dataId:"", name:"", phone:"", email:""})}>
+                <span >&times;</span>
               </button>
-            </Modal.Header>
-            <Form className="modal-content form-elegant" id="popup-add-solution" onSubmit={this.handleFormSubmit}>
-              <Modal.Body className="modal-body">
+            </div>
+            
+            {this.state.errorMessage.length > 0 && (
+              <div> {this.state.errorMessage.map((el, index)=> 
+                (
+                <Alert key={index} variant={'danger'}>{el}</Alert>
+                ))} 
+              </div>
+            )}
+            
+            <form id="popup-add-solution" onSubmit={this.handleFormSubmit}>
+              <div className="modal-body">
                 <div className="form-group row">
-                  <label htmlFor="popup-bug-solution" className="col-form-label col-sm-2">Status:</label>
+                  <label htmlFor="popup-bug-solution" className="col-form-label">Status:</label>
                   <div className="col-sm-10 mt-2" onChange={this.handleChange}>
                     <input className="ml-3" type="radio" name="status" defaultChecked value="Confirmed" /><label
                       className="ml-1">Confirmed
@@ -214,31 +224,32 @@ export default class BugDetails extends React.Component {
                       </label>
                     <input className="ml-3" type="radio" name="status" value="Resolved" /><label className="ml-1">Resoveld</label>
                   </div>
+                  {/* <input id="popup-service-name" name="name" type="text" className="form-control" value={this.state.name} onChange={this.handleChange}/> */}
                 </div>
 
                 <div className="form-group row">
-                  <label htmlFor="popup-bug-solution" className="col-form-label col-sm-2">Severity:</label>
+                  <label htmlFor="popup-bug-solution" className="col-form-label">Severity:</label>
                   <div className="col-sm-10 mt-2" onChange={this.handleChange}>
-                    <input className="ml-3" type="radio" name="severity" value="Critical" defaultChecked /><label
-                      className="ml-1">Critical </label>
-                    <input className="ml-3" type="radio" name="severity" value="High" /><label className="ml-1">High </label>
-                    <input className="ml-3" type="radio" name="severity" value="Medium" />
-                    <label className="ml-1" l>Medium </label>
-                    <input className="ml-3" type="radio" name="severity" value="Low" /><label className="ml-1">Low </label>
+                    <input className="ml-3" type="radio" name="severity" defaultChecked value="Critical" /><label
+                      className="ml-1">Critical
+                      </label>
+                    <input className="ml-3" type="radio" name="severity" value="High" /><label className="ml-1">High
+                      </label>
+                    <input className="ml-3" type="radio" name="severity" value="Medium" /><label className="ml-1">Medium</label>
+                    <input className="ml-3" type="radio" name="severity" value="Low" /><label className="ml-1">Low</label>
                   </div>
                 </div>
-
                 <div className="form-group">
                   <label htmlFor="popup-bug-solution" className="col-form-label">Solution:</label>
                   <textarea id="sol" type="text" name="solution" rows="3" className="form-control"
-                    placeholder="Ex: Some solution..." onChange={this.handleChange}></textarea>
-                </div>
-              </Modal.Body>
-              <div className="modal-footer">
-                <button type="reset" className="btn btn-dark">Reset</button>
-                <button type="submit" className="btn btn-secondary"><i className=" mr-1 far fa-save"></i>Save</button>
+                  placeholder="Ex: Some solution..." onChange={this.handleChange}></textarea>
+                </div>             
               </div>
-            </Form>
+              <div className="modal-footer">
+                {/* <button type="reset" className="btn btn-secondary" data-dismiss="modal">Reset</button> */}
+                <button type="submit" className="btn btn-primary"><i className=" mr-1 far fa-save"></i>Save</button>
+              </div>
+            </form>   
           </div>
         </Modal>
       </div>

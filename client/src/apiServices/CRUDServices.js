@@ -197,7 +197,7 @@ export default class CRUDServices extends Component {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="editModalLabel">Edit Service</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false, errorMessageEdit:[]})}>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false, errorMessageEdit:[], dataId:"", name:"", phone:"", email:""})}>
                 <span >&times;</span>
               </button>
             </div>
@@ -227,7 +227,7 @@ export default class CRUDServices extends Component {
                   <input id="popup-service-email" name="email" type="text" className="form-control" value={this.state.email} onChange={this.handleChange}/>
                 </div>              
               </div>
-              <div div className="modal-footer">
+              <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" className="btn btn-primary"><i className=" mr-1 far fa-save"></i>Save</button>
               </div>
