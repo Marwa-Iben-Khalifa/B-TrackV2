@@ -47,8 +47,7 @@ app.use(session({
 require('./passport')(app);
 app.use('/api', require('./routes/auth-routes'));
 app.use('/api', require('./routes/fileUploader'));
-const dashboard = require('./routes/dashboard');
-app.use('/dashboard', dashboard);
+// app.use('/api', require('./routes/dashboard'));
 app.use('/api', require('./routes/bugs'));
 app.use('/api', require ('./routes/services'))
 

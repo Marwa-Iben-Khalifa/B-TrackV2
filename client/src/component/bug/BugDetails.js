@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import service from '../api/service';
-import { Timeline, TimelineEvent } from "react-event-timeline";
-import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
+
 import 'react-vertical-timeline-component/style.min.css';
+import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
+
 import { Button, Modal, Form, FormGroup, Row, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 
 
@@ -19,7 +21,8 @@ export default class BugDetails extends React.Component {
     show: false,
     status: "",
     severity: "",
-    solution: ""
+    solution: "",
+    errorMessage:[]
   };
 
 
@@ -60,11 +63,11 @@ export default class BugDetails extends React.Component {
     const solution= this.state.solution;
     const { params } = this.props.match;
     service.service.post(`/${params.id}/solution`, {status, severity, solution})
-      .then(() => {  
-        this.getBugFromApi()          
-        this.setState({status: "", severity: "", solution: "", show: false});
+      .then(() => { 
+        this.getBugFromApi() 
+        this.setState({status: "", severity: "", solution: "",errorMessage:[], show: false});
       })
-      .catch( error => console.log(error) )
+      .catch((error)=> this.setState({errorMessage:error.response.data.message}))
 
   }
   
@@ -192,52 +195,50 @@ export default class BugDetails extends React.Component {
         </div>
 
         <Modal className="modal fade " id="addSolutionModal" tabIndex="-1" role="dialog" show={this.state.show} >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <Modal.Header className="modal-header text-center">
-                <h5 className="modal-title" id="addSolutionModalLabel">Add solution</h5>
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false})}>
-                  <span aria-hidden="false">&times;</span>
-                </button>
-              </Modal.Header>
-              <Form className="modal-content form-elegant" id="popup-add-solution" onSubmit={this.handleFormSubmit}>
-                <Modal.Body className="modal-body">
-                  <div className="form-group row">
-                    <label htmlFor="popup-bug-solution" className="col-form-label col-sm-2">Status:</label>
-                    <div className="col-sm-10 mt-2" onChange={this.handleChange}>
-                      <input className="ml-3" type="radio" name="status" defaultChecked value="Confirmed" /><label
-                        className="ml-1">Confirmed
-                        </label>
-                      <input className="ml-3" type="radio" name="status" value="In Progress" /><label className="ml-1">InProgress
-                        </label>
-                      <input className="ml-3" type="radio" name="status" value="Resolved" /><label className="ml-1">Resoveld</label>
-                    </div>
+          <div className="modal-content">
+            <Modal.Header className="modal-header text-center">
+              <h5 className="modal-title" id="addSolutionModalLabel">Add solution</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false})}>
+                <span aria-hidden="false">&times;</span>
+              </button>
+            </Modal.Header>
+            <Form className="modal-content form-elegant" id="popup-add-solution" onSubmit={this.handleFormSubmit}>
+              <Modal.Body className="modal-body">
+                <div className="form-group row">
+                  <label htmlFor="popup-bug-solution" className="col-form-label col-sm-2">Status:</label>
+                  <div className="col-sm-10 mt-2" onChange={this.handleChange}>
+                    <input className="ml-3" type="radio" name="status" defaultChecked value="Confirmed" /><label
+                      className="ml-1">Confirmed
+                      </label>
+                    <input className="ml-3" type="radio" name="status" value="In Progress" /><label className="ml-1">InProgress
+                      </label>
+                    <input className="ml-3" type="radio" name="status" value="Resolved" /><label className="ml-1">Resoveld</label>
                   </div>
-
-                  <div className="form-group row">
-                    <label htmlFor="popup-bug-solution" className="col-form-label col-sm-2">Severity:</label>
-                    <div className="col-sm-10 mt-2" onChange={this.handleChange}>
-                      <input className="ml-3" type="radio" name="severity" value="Critical" defaultChecked /><label
-                        className="ml-1">Critical </label>
-                      <input className="ml-3" type="radio" name="severity" value="High" /><label className="ml-1">High </label>
-                      <input className="ml-3" type="radio" name="severity" value="Medium" />
-                      <label className="ml-1" l>Medium </label>
-                      <input className="ml-3" type="radio" name="severity" value="Low" /><label className="ml-1">Low </label>
-                    </div>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="popup-bug-solution" className="col-form-label">Solution:</label>
-                    <textarea id="sol" type="text" name="solution" rows="3" className="form-control"
-                      placeholder="Ex: Some solution..." onChange={this.handleChange}></textarea>
-                  </div>
-                </Modal.Body>
-                <div className="modal-footer">
-                  <button type="reset" className="btn btn-dark">Reset</button>
-                  <button type="submit" className="btn btn-secondary"><i className=" mr-1 far fa-save"></i>Save</button>
                 </div>
-              </Form>
-            </div>
+
+                <div className="form-group row">
+                  <label htmlFor="popup-bug-solution" className="col-form-label col-sm-2">Severity:</label>
+                  <div className="col-sm-10 mt-2" onChange={this.handleChange}>
+                    <input className="ml-3" type="radio" name="severity" value="Critical" defaultChecked /><label
+                      className="ml-1">Critical </label>
+                    <input className="ml-3" type="radio" name="severity" value="High" /><label className="ml-1">High </label>
+                    <input className="ml-3" type="radio" name="severity" value="Medium" />
+                    <label className="ml-1" l>Medium </label>
+                    <input className="ml-3" type="radio" name="severity" value="Low" /><label className="ml-1">Low </label>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="popup-bug-solution" className="col-form-label">Solution:</label>
+                  <textarea id="sol" type="text" name="solution" rows="3" className="form-control"
+                    placeholder="Ex: Some solution..." onChange={this.handleChange}></textarea>
+                </div>
+              </Modal.Body>
+              <div className="modal-footer">
+                <button type="reset" className="btn btn-dark">Reset</button>
+                <button type="submit" className="btn btn-secondary"><i className=" mr-1 far fa-save"></i>Save</button>
+              </div>
+            </Form>
           </div>
         </Modal>
       </div>
