@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link, Redirect } from 'react-router-dom';
 import service from '../api/service'
 import { Button, Modal, Form, FormGroup, Row, Alert } from 'react-bootstrap';
-import Popin from '../Popin.js';
+import Footer from "../navBar/Footer"
 
 
 

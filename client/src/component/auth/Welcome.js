@@ -5,6 +5,8 @@ import Dashboard from '../dashboard/Dashboard'
 import Details from '../auth/Details'
 // import Nav from '../auth/Nav'
 import Navbar from '../navBar/Navbar'
+import Footer from '../navBar/Footer'
+
 import Popin from '../Popin.js';
 
 
@@ -21,7 +23,7 @@ export default class Welcome extends Component {
         <Redirect to="/dashboard" user={this.props.user}/>
         ) : (
         <Popin one={(
-          <div>
+          <div style={{marginBottom:"60px", height:"100%"}}>
             <Navbar  user={this.props.user}/>
             <Jumbotron fluid className="mb-5">
               <Container fluid>            
@@ -35,7 +37,7 @@ export default class Welcome extends Component {
             </Jumbotron>
             
            <Details/>
-           
+           <Footer/>
           </div>)} />
         )}
       </div>

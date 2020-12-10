@@ -2,7 +2,10 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import service from '../api/service';
 import { Redirect } from 'react-router-dom';
+import {Container} from 'react-bootstrap'
 import Navbar from "../navBar/Navbar"
+import Footer from '../navBar/Footer'
+
 
 
 
@@ -25,14 +28,13 @@ export default class Dashboard extends Component {
           <Redirect to="/" />
         ) : (
           
-            <>
+            <Container fluid >
               <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
-              <div className="cta">
-                <button className="btn logout" onClick={this.logout}>Logout</button>
-              </div>
-            
+              <Container style={{marginBottom:"60px", height:"100%"}}>
+              </Container>
+              <Footer/>
               
-            </>
+            </Container>
           
         )}
       </>

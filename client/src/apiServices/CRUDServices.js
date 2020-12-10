@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
-import { Button, Modal, Form, Row, Alert , Col, InputGroup, Table, Container} from 'react-bootstrap';
+import { Button, Modal, Form, Row, Alert , Col, InputGroup, Table, Container, Spinner} from 'react-bootstrap';
 import axios from 'axios'
 import Navbar from '../component/navBar/Navbar'
+import Footer from '../component/navBar/Footer'
+
 import service from '../component/api/service';
 
 
@@ -10,7 +12,7 @@ import service from '../component/api/service';
 
 export default class CRUDServices extends Component {
   state={
-    // user:this.props.user,
+    user:null,
     listOfServices:[],
     show: false,
     dataId:"",
@@ -20,7 +22,15 @@ export default class CRUDServices extends Component {
     errorMessage:[],
     errorMessageEdit:[],
     sortby:"",
-    query:""
+    query:"",
+    connected:false
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if (!prevProps.user._id &&( this.props.user._id ||this.props.user === false)) {
+      this.setState({user:this.props.user})
+      console.log("mise à jours user", this.props.user)
+    }
   }
   
   componentDidMount() {
@@ -90,6 +100,23 @@ export default class CRUDServices extends Component {
   handleReset = (event) => {
     this.setState({name:"", phone:"", email:"", errorMessageEdit:[], errorMessage:[]})
   }
+
+  showContainer = () => {
+      return(
+        <div>
+          <Button variant="primary" disabled>
+            <Spinner
+              as="span"
+              animation="grow"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+            Loading...
+          </Button>
+        </div>
+      )
+  }
   
   render() {
     let serv = [...this.state.listOfServices]; // make a copy (prevent mutating if .sort)
@@ -110,11 +137,17 @@ export default class CRUDServices extends Component {
       serv = serv.filter(service => service.name.includes(query))
     } 
     console.log("user:",this.props);
+
+    if (this.state.user === null) return this.showContainer()
+    if (this.state.user === false) return <Redirect to="/"/>
+    console.log("upppp:",this.props.updateUser)
+
+
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
-        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder"}}  >
-          <h2 >Service list</h2>
+        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px", height:"100%"}}  >
+          <h2 >Services list</h2>
           <Row className="fluid">
             <Form.Control as="select"
               className="col-md-1 md-form"
@@ -236,7 +269,8 @@ export default class CRUDServices extends Component {
             </Modal.Footer>
           </Form>   
         </Modal>
-      </Container>
+        <Footer/>
+      </Container>      
     )
   }
 }

@@ -23,7 +23,9 @@ export default class App extends Component {
     if (!this.state.user._id) {
       srv.loggedin()
         .then(data => this.setState({user: data}))
-        .catch(err => this.setState({user: {}}))
+        .catch(err => {
+          console.log("not logged!")
+          this.setState({user: false})})
       ;
     } else {
       console.log('user already in the state')
@@ -72,11 +74,11 @@ export default class App extends Component {
           )} />
 
           <Route exact path="/:id/bug-details" render={(props) => (
-            <BugDetails user={this.state.user}  history={props.history} {...props} />
+            <BugDetails user={this.state.user} updateUser={this.updateUser}  history={props.history} {...props} />
           )} />
           
           <Route exact path="/bugs-list" render={(props) => (
-            <BugsList user={this.state.user}  history={props.history}  />
+            <BugsList user={this.state.user} updateUser={this.updateUser}  history={props.history}  />
           )} />
 
           {/* last route, ie: 404 */}

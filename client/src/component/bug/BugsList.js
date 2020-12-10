@@ -2,19 +2,29 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import service from '../api/service';
 import Navbar from "../navBar/Navbar"
+import Footer from '../navBar/Footer'
 
 
-import { Button, Form,  Row, Container, Table, InputGroup} from 'react-bootstrap';
+
+import { Button, Form,  Row, Container, Table, InputGroup, Spinner} from 'react-bootstrap';
 
 import { Link, Redirect } from 'react-router-dom';
 
 
 export default class BugsList extends Component {
   state={
+    user: null,
     bugs:[],
     sortby:"",
     query:""
   };
+
+  componentDidUpdate(prevProps, prevState){
+    if (!prevProps.user._id &&( this.props.user._id ||this.props.user === false)) {
+      this.setState({user:this.props.user})
+      console.log("mise à jours user", this.props.user)
+    }
+  }
 
   deleateBug=(id)=> {
     axios.get(`http://localhost:3001/api/${id}/delete`)
@@ -43,6 +53,25 @@ export default class BugsList extends Component {
   componentDidMount() {
     this.getBugsFromApi();
   }
+
+  showContainer = () => {
+    return(
+      <div>
+        <Button variant="primary" disabled>
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          Loading...
+        </Button>
+      </div>
+    )
+  }
+
+
   render() {
     console.log(this.state.bugs)
     let bugsList = [...this.state.bugs]; // make a copy (prevent mutating if .sort)
@@ -72,12 +101,14 @@ export default class BugsList extends Component {
       }else{
       bugsList = bugsList.filter(b => b.bug.title.includes(query))
     } }
-    console.log(this.props.user)
+    console.log(this.props.updateUser)
+    if (this.state.user === null) return this.showContainer()
+    if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
-        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder"}}>
-          <h2 >Bug list</h2>
+        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
+          <h2 >Bugs list</h2>
           <Row className="fluid">
             <Form.Control as="select"
               className="col-md-1 md-form"
@@ -139,6 +170,7 @@ export default class BugsList extends Component {
             </tbody>
           </Table>
         </Container>
+        <Footer/>
       </Container>      
     )
   }

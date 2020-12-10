@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link , Redirect} from 'react-router-dom';
 import service from '../api/service';
 import Popin from '../Popin.js';
+import Footer from "../navBar/Footer"
 
 import { Button, Modal, Form, FormGroup, Alert } from 'react-bootstrap';
 
