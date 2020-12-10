@@ -13,6 +13,7 @@ import CRUDServices from './apiServices/CRUDServices'
 import NewBug from './component/bug/NewBug'
 import BugDetails from './component/bug/BugDetails'
 import BugsList from './component/bug/BugsList'
+import UserProfil from './component/User-profil'
 
 
 export default class App extends Component {
@@ -77,6 +78,10 @@ export default class App extends Component {
           
           <Route exact path="/bugs-list" render={(props) => (
             <BugsList user={this.state.user}  history={props.history}  />
+          )} />
+
+          <Route exact path="/profil" render={(props) => (
+            <UserProfil user={this.state.user}  history={props.history} {...props} updateUser={this.updateUser}/>
           )} />
 
           {/* last route, ie: 404 */}

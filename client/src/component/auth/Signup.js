@@ -67,7 +67,7 @@ export default class Signup extends Component {
     this.setState({[name]: value});
   }
 
-  handelUpload=(event) =>{
+  handleUpload=(event) =>{
     const uploadData = new FormData();
     uploadData.append('imageURL', event.target.files[0]);
     service.upload(uploadData)
@@ -148,13 +148,13 @@ export default class Signup extends Component {
                     <Row>
                       <FormGroup className="md-form mb-5 custom-file" >                  
                         <i className="fa fa-camera prefix grey-text"></i>
-                        <Form.File for="input-image"type="file" name="input-image" className="custom-file-input" id="input-image"  onChange={this.handelUpload} />
+                        <Form.File for="input-image"type="file" name="input-image" className="custom-file-input" id="input-image"  onChange={this.handleUpload} />
                         <label htmlFor="input-image">Choose Avatar</label>                  
                       </FormGroup>
                     </Row>
 
                     <Row>
-                      <Form.Control as="select" className="mr-sm-2 mt-2" id="inlineFormCustomSelect" value={this.state.service} name="service" id="inputService" onChange={(this.handleChange)} style={{border:"none", borderBottom: "1px solid #D9DEE0"}} custom>
+                      <Form.Control as="select" className="mr-sm-2 mt-2" id="inlineFormCustomSelect" value={this.state.service} name="service" id="inputService" onChange={this.handleChange} style={{border:"none", borderBottom: "1px solid #D9DEE0"}} custom>
                             {/* afficher tous les services dans une boite select */}
                             <option value="">Service</option>
                             {this.state.listOfServices.map( service => {
