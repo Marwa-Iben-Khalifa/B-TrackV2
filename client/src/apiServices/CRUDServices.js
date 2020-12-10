@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
-import { Button, Modal, Form, FormGroup, Row, Alert } from 'react-bootstrap';
+import { Button, Modal, Form, Row, Alert , Col, InputGroup, Table, Container} from 'react-bootstrap';
 import axios from 'axios'
 import Navbar from '../component/navBar/Navbar'
 import service from '../component/api/service';
@@ -10,6 +10,7 @@ import service from '../component/api/service';
 
 export default class CRUDServices extends Component {
   state={
+    // user:this.props.user,
     listOfServices:[],
     show: false,
     dataId:"",
@@ -85,6 +86,10 @@ export default class CRUDServices extends Component {
       .catch((error)=> this.setState({errorMessage:error.response.data.message}))
 
   }
+
+  handleReset = (event) => {
+    this.setState({name:"", phone:"", email:"", errorMessageEdit:[], errorMessage:[]})
+  }
   
   render() {
     let serv = [...this.state.listOfServices]; // make a copy (prevent mutating if .sort)
@@ -100,34 +105,35 @@ export default class CRUDServices extends Component {
       serv.sort((a, b) => a.email.localeCompare(b.email))
     }
     
-    // Filter `foods` with `query`
+    // Filter `services` with `query`
     if (query) {
       serv = serv.filter(service => service.name.includes(query))
     } 
+    console.log("user:",this.props);
     return (
-      <div>
-        <Navbar/>
-        <div className="container-fluid">
-          <h2>Service list</h2>
-            <Row className="fluid">
-              <Form.Control as="select"
-                className="col-md-1 md-form"
-                id="inlineFormCustomSelect" 
-                value={this.state.sortby}
-                name="sort"
-                id="sortList"
-                onChange={(e)=> this.setState({sortby: e.target.value})}
-                custom>
-                <option value="default">Sort by...</option>
-                <option value="name">Name</option>
-                <option value="email">Email</option>                    
-              </Form.Control>
-              <div className="col-md-4 md-form ">
-                <i className="fas fa-search prefix grey-text"></i>
-                <input className="form-control validate md-form" type="search" placeholder="Search" value={this.state.query} onChange={this.handleQuery} />
-              </div>
-            </Row>
-          <table className="table table-striped table-hover table-sm">
+      <Container fluid>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder"}}  >
+          <h2 >Service list</h2>
+          <Row className="fluid">
+            <Form.Control as="select"
+              className="col-md-1 md-form"
+              id="inlineFormCustomSelect" 
+              value={this.state.sortby}
+              name="sort"
+              id="sortList"
+              onChange={(e)=> this.setState({sortby: e.target.value})}
+              custom>
+              <option value="default">Sort by...</option>
+              <option value="name">Name</option>
+              <option value="email">Email</option>                    
+            </Form.Control>
+            <InputGroup className="col-md-4 md-form ml-2 ">
+              <i className="fas fa-search prefix grey-text" style={{left: "0px"}}></i>
+              <Form.Control className=" md-form"  type="search" placeholder="Search" value={this.state.query} onChange={this.handleQuery} />
+            </InputGroup>
+          </Row>
+          <Table striped bordered hover responsive="sm" >
             <thead>
               <tr>
                 <td>Name</td>
@@ -144,18 +150,18 @@ export default class CRUDServices extends Component {
                   <td>{service.phone}</td>
                   <td>{service.email}</td>
                   <td className="d-flux">
-                    <button className="btn btn-danger" onClick={(event)=>{this.deleateService( service._id)}}>
-                      <i className="fas fa-trash-alt" ></i></button>
-                    <button  className="btn btn-info" data-toggle="modal" data-target="#editModal" onClick={()=> this.setState({show:true, dataId:service._id, name:service.name, phone:service.phone, email:service.email })}> 
-                    <i className="far fa-edit" ></i> </button>
+                    <Button variant="danger" onClick={(event)=>{this.deleateService( service._id)}}>
+                      <i className="fas fa-trash-alt" ></i></Button>
+                    <Button  variant="info"  data-target="#editModal" onClick={()=> this.setState({show:true, dataId:service._id, name:service.name, phone:service.phone, email:service.email })}> 
+                    <i className="far fa-edit" ></i> </Button>
                   </td>
                 </tr>
                 )})
               }
             </tbody>
-          </table>
+          </Table>
           
-          <div>
+          <Form  onSubmit={this.handleFormSubmit} onReset={this.handleReset}>
             {this.state.errorMessage.length > 0 && (
               <div> {this.state.errorMessage.map((el, index)=> 
                 (
@@ -163,77 +169,74 @@ export default class CRUDServices extends Component {
                 ))} 
               </div>
             )}
-            <form  onSubmit={this.handleFormSubmit}>
-            
-              <div className="row md-form">
-                <div className="col ">
-                  <div className="input-group input-group-lg"></div> 
-                  <input type="text" className="form-control" aria-label="Large"
-                    aria-describedby="inputGroup-sizing-sm" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} />
-                </div>
-                <div className="col ">
-                  <div className="input-group input-group-lg"></div>
-                  <input className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="phone"
-                    placeholder="Phone" value={this.state.phone} onChange={this.handleChange} />
-                </div>
-      
-                <div className="col ">
-                  <div className="input-group input-group-lg"></div>
-                  <input type="text" className="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="email"
-                    placeholder="Mail" value={this.state.email} onChange={this.handleChange}/>
-                </div>
-                      
-                <div className="col">
-                  <button type="submit" className="btn btn-secondary">Add</button>
-                </div>
-              </div>
-            </form>
-          </div>
+            <Row responsive={true} className="md-form">
+              <Col sm>
+                <InputGroup className="input-group-lg"></InputGroup> 
+                <Form.Control type="text" aria-label="Large"
+                  aria-describedby="inputGroup-sizing-sm" name="name" placeholder="Name" value={this.state.name} onChange={this.handleChange} />
+              </Col>
+              <Col sm>
+                <InputGroup className=" input-group-lg"></InputGroup>
+                <Form.Control  aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="phone"
+                  placeholder="Phone" value={this.state.phone} onChange={this.handleChange} />
+              </Col>
+    
+              <Col sm>
+                <InputGroup className="input-group-lg"></InputGroup>
+                <Form.Control type="text"  aria-label="Large" aria-describedby="inputGroup-sizing-sm" name="email"
+                  placeholder="Mail" value={this.state.email} onChange={this.handleChange}/>
+              </Col>
+                    
+              <Col sm>
+                <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i></Button>
+                <Button type="reset" variant="secondary" >Reset</Button>
+              </Col>
+            </Row>
+          </Form>
               
-        </div>
+        </Container>
 
 
-        <Modal className="modal fade " id="editService" tabIndex="-1" role="dialog" show={this.state.show}>
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="editModalLabel">Edit Service</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false, errorMessageEdit:[], dataId:"", name:"", phone:"", email:""})}>
-                <span >&times;</span>
-              </button>
+        <Modal id="editService" tabIndex="-1" role="dialog" show={this.state.show}>
+          <Modal.Header>
+            <Modal.Title  id="editModalLabel">Edit Service</Modal.Title>
+            <Button  onClick={()=> this.setState({show:false, errorMessageEdit:[], dataId:"", name:"", phone:"", email:""})}>
+              <span >&times;</span>
+            </Button>
+          </Modal.Header>
+          
+          {this.state.errorMessageEdit.length > 0 && (
+            <div> {this.state.errorMessageEdit.map((el, index)=> 
+              (
+              <Alert key={index} variant={'danger'}>{el}</Alert>
+              ))} 
             </div>
-            
-            {this.state.errorMessageEdit.length > 0 && (
-              <div> {this.state.errorMessageEdit.map((el, index)=> 
-                (
-                <Alert key={index} variant={'danger'}>{el}</Alert>
-                ))} 
-              </div>
-            )}
-            
-            <form id="popup-edit-from" onSubmit={this.handleFormEdit}>
-              <div className="modal-body">
-                <div className="form-group">
-                  <label htmlFor="popup-service-name" className="col-form-label">Name:</label>
-                  <input id="popup-service-name" name="name" type="text" className="form-control" value={this.state.name} onChange={this.handleChange}/>
-                </div>
+          )}
+          
+          <Form id="popup-edit-from" onSubmit={this.handleFormEdit} onReset={this.handleReset}>
+            <Modal.Body>
+              <Form.Group >
+                <Form.Label htmlFor="popup-service-name" >Name:</Form.Label>
+                <Form.Control id="popup-service-name" name="name" type="text"  value={this.state.name} onChange={this.handleChange}/>
+              </Form.Group>
 
-                <div className="form-group">
-                  <label htmlFor="popup-service-phone" className="col-form-label">Phone:</label>
-                  <input id="popup-service-phone" name="phone" type="text" className="form-control" value={this.state.phone} onChange={this.handleChange}/>
-                </div>
+              <Form.Group>
+                <Form.Label htmlFor="popup-service-phone" >Phone:</Form.Label>
+                <Form.Control id="popup-service-phone" name="phone" type="text"  value={this.state.phone} onChange={this.handleChange}/>
+              </Form.Group>
 
-                <div className="form-group">
-                  <label htmlFor="popup-service-email" className="col-form-label">Email:</label>
-                  <input id="popup-service-email" name="email" type="text" className="form-control" value={this.state.email} onChange={this.handleChange}/>
-                </div>              
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" className="btn btn-primary"><i className=" mr-1 far fa-save"></i>Save</button>
-              </div>
-            </form>   
-          </div>
+              <Form.Group>
+                <Form.Label htmlFor="popup-service-email" >Email:</Form.Label>
+                <Form.Control id="popup-service-email" name="email" type="text"  value={this.state.email} onChange={this.handleChange}/>
+              </Form.Group>              
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="reset" variant="secondary" >Reset</Button>
+              <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i>Save</Button>
+            </Modal.Footer>
+          </Form>   
         </Modal>
-      </div>
-  )}
+      </Container>
+    )
+  }
 }

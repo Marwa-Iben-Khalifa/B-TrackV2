@@ -11,7 +11,6 @@ import Popin from '../Popin.js';
 
 
 export default class Signup extends Component {
-    // fileInput = React.createRef();
     state = { 
       firstname: "",
       lastname: "" ,
@@ -50,7 +49,6 @@ export default class Signup extends Component {
       // 2. then, update with user infos
       service.edit(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.password, this.state.confirmPassword, this.state.imageURL)
       .then(response => {
-        // this.setState({errorMessage: ""});
         this.setState({firstname: "", lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[] });
 
         this.props.updateUser(response);
@@ -80,7 +78,9 @@ export default class Signup extends Component {
 
   }
 
-  
+  handleReset = (event) => {
+    this.setState({firstname: "",lastname: "" , service: "", role: "", email: "" , password: "" , confirmPassword: "", imageURL:"https://res.cloudinary.com/dshuazgaz/image/upload/v1602411437/avatar_el8zal.webp", errorMessage:[]})
+  }
 
 
   render() {
@@ -89,7 +89,6 @@ export default class Signup extends Component {
         {this.props.user._id ? (
           <Redirect to="/dashboard" />
         ) : (
-          <Popin  one={(
             <>
               <Modal className="modal fade" id="orangeModalSubscription" tabIndex="-1" role="dialog" show={true} style={{backgroundColor:"#515ea261"}} >
                 <Form className="modal-content form-elegant container-fluid " onSubmit={this.handleFormSubmit} onReset={this.handleReset}> 
@@ -109,35 +108,35 @@ export default class Signup extends Component {
                   
                   <Modal.Body className="modal-body">
                       
-                    <Row>
-                      <FormGroup className="md-form mb-2">                  
+                    <Row className="">
+                      <FormGroup className="md-form">                  
                         <i className="fa fa-user prefix grey-text"></i>
                         <input  type="text" name="firstname" placeholder="Firstname" className="form-control validate " id="inputFirstName"  value={this.state.firstname} onChange={this.handleChange} />
                         <label htmlFor="inputFirstName"></label>
 
                       </FormGroup> 
-                      <FormGroup className="md-form mb-2 ml-4">
+                      <FormGroup className="md-form ml-2">
                         <i className="fa fa-user prefix grey-text"></i>
                         <input type="text" name="lastname" placeholder="Lastname" className="form-control validate" id="inputLastname" value={this.state.lastname} onChange={this.handleChange} />
                         <label htmlFor="inputLastname"></label>
                       </FormGroup>
                     </Row>
                     
-                    <Row>
-                      <FormGroup className="md-form mb-2 form-control" style={{border:"none"}}>
+                    <Row className="row s">
+                      <FormGroup className="md-form  form-control signEmail" style={{border:"none"}}>
                         <i className="fa fa-envelope prefix grey-text"></i>
                         <input type="email" name="email" placeholder="Email adress" className=" validate " id="inputEmail"  value={this.state.email} onChange={this.handleChange}  />
                         <label data-error="wrong" data-success="right" htmlFor="inputEmail"></label>
                       </FormGroup>
                     </Row>
                     
-                    <Row>
-                      <FormGroup className="md-form mb-2">
+                    <Row className="row s">
+                      <FormGroup className="md-form ">
                         <i className="fa fa-lock prefix grey-text"></i>
                         <input type="password" name="password" placeholder="Password" className="form-control validate" id="inputPassword"  value={this.state.password} onChange={this.handleChange}/>
                         <label htmlFor="inputPassword"></label>
                       </FormGroup>
-                      <FormGroup className="md-form mb-2 ml-4">
+                      <FormGroup className="md-form ml-2">
                         <i className="fas fa-lock prefix grey-text"></i>
                         <input type="password" name="confirmPassword" className="form-control validate" id="inputConfirmPassword"
                           value={this.state.confirmPassword} placeholder="Confirm Password" onChange={this.handleChange} />
@@ -145,15 +144,15 @@ export default class Signup extends Component {
                       </FormGroup>
                     </Row>
 
-                    <Row>
-                      <FormGroup className="md-form mb-5 custom-file" >                  
+                    <Row className="row s">
+                      <FormGroup className="md-form  custom-file" >                  
                         <i className="fa fa-camera prefix grey-text"></i>
-                        <Form.File for="input-image"type="file" name="input-image" className="custom-file-input" id="input-image"  onChange={this.handelUpload} />
+                        <Form.File htmlFor="input-image"type="file" name="input-image" className="custom-file-input" id="input-image"  onChange={this.handelUpload} />
                         <label htmlFor="input-image">Choose Avatar</label>                  
                       </FormGroup>
                     </Row>
 
-                    <Row>
+                    <Row className="row s">
                       <Form.Control as="select" className="mr-sm-2 mt-2" id="inlineFormCustomSelect" value={this.state.service} name="service" id="inputService" onChange={(this.handleChange)} style={{border:"none", borderBottom: "1px solid #D9DEE0"}} custom>
                             {/* afficher tous les services dans une boite select */}
                             <option value="">Service</option>
@@ -182,7 +181,6 @@ export default class Signup extends Component {
                 </Form>  
               </Modal>
             </>
-          )} />
         )}
       </>
       

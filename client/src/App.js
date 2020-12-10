@@ -8,7 +8,7 @@ import Welcome from './component/auth/Welcome'
 import Signup from './component/auth/Signup'
 import Login from './component/auth/Login'
 import Dashboard from './component/dashboard/Dashboard'
-import service from './component/api/service'
+import srv from './component/api/service'
 import CRUDServices from './apiServices/CRUDServices'
 import NewBug from './component/bug/NewBug'
 import BugDetails from './component/bug/BugDetails'
@@ -21,7 +21,7 @@ export default class App extends Component {
   }
   fetchUser = () => {
     if (!this.state.user._id) {
-      service.loggedin()
+      srv.loggedin()
         .then(data => this.setState({user: data}))
         .catch(err => this.setState({user: {}}))
       ;
@@ -63,12 +63,12 @@ export default class App extends Component {
           )} />
           
           <Route exact path="/services" render={(props) => (
-            <CRUDServices user={this.state.user} updateUser={this.updateUser} history={props.history} />
+            <CRUDServices user={this.state.user} updateUser={this.updateUser} history={props.history}/>
           )} />
 
 
           <Route exact path="/new-bug" render={(props) => (
-            <NewBug user={this.state.user}  history={props.history} />
+            <NewBug user={this.state.user} updateUser={this.updateUser}  history={props.history} />
           )} />
 
           <Route exact path="/:id/bug-details" render={(props) => (

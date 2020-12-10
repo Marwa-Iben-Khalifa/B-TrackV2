@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import Popin from '../Popin.js';
 import service from '../api/service';
 import { Redirect } from 'react-router-dom';
+import Navbar from "../navBar/Navbar"
+
 
 
 export default class Dashboard extends Component {
@@ -16,34 +17,23 @@ export default class Dashboard extends Component {
     ;
   }
 
-  // handelUpload=(event) =>{
-  //   let uploadData = new FormData();
-  //   uploadData.append('imageURL', event.target.files[0]);
-  //   service.upload(uploadData)
-  //   .then(response =>{
-  //     this.props.updateUser(response);
-  //   })
-    
-  // ;
-  // }
-
-
-
   render() {
+    console.log("user",this.props.user)
     return (
       <>
         {!this.props.user._id ? (
           <Redirect to="/" />
         ) : (
-          <Popin  one={(
+          
             <>
+              <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
               <div className="cta">
                 <button className="btn logout" onClick={this.logout}>Logout</button>
               </div>
             
               
             </>
-          )} />
+          
         )}
       </>
     )

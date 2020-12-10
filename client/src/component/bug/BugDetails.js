@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import srv from '../api/service';
-import { Button, Modal, Form, FormGroup, Row, Alert } from 'react-bootstrap';
+import Navbar from "../navBar/Navbar"
+
+import { Button, Modal, Form, Row, Alert, FormControl, Container } from 'react-bootstrap';
 
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 
 
-import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 
 
@@ -64,7 +66,7 @@ export default class BugDetails extends React.Component {
     const { params } = this.props.match;
     srv.service.post(`/${params.id}/solution`, {status, severity, solution})
       .then(() => {
-        this.setState({status: "", severity: "", solution: "",errorMessage:[], show: false});
+        this.setState({show:false, status: "", severity: "", solution: "",errorMessage:[], });
         this.getBugFromApi() 
         this.props.history.push(`/${params.id}/bug-details`);
         console.log('hello', this.state)
@@ -72,188 +74,168 @@ export default class BugDetails extends React.Component {
       .catch((error)=> this.setState({errorMessage:error.response.data.message}))
 
   }
+
+  handleReset = (event) => {
+    this.setState({status: "", severity: "", solution: "", errorMessage:[]})
+  }
   
 
   render() {
     return (
-      <div className="container" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder"}}>
-        {/* <div className="row">
-          <div className="col-12">
-            <h3>Bug details:</h3>
-          </div>
-        </div> */}
-
-        {/* {this.state.bug.severity === "Critical" 
-        &&
-        <div className="border pl-3" style={{backgroundColor:"black"}}>
-          <h3 className="text-muted">Bug Overview</h3>
-        </div>}
-        {this.state.bug.severity === "High" 
-        && 
-        <div className="border pl-3" style={{backgroundColor: "red"}}>
-          <h3 className="text-muted">Bug Overview</h3>
-        </div>
-        }
-        {this.state.bug.severity === "Medium" 
-        && 
-        <div className="border pl-3" style={{backgroundColor: "blue"}}>
-          <h3 className="text-muted">Bug Overview</h3>
-        </div>}
-        {this.state.bug.severity === "Low" 
-        && 
-        <div className="border pl-3" style={{backgroundColor: "green"}}>
-          <h3 className="text-muted">Bug Overview</h3>
-        </div>} */}
-          
-
-        <div className="border pl-3  text-white" style={{backgroundColor:"#7189da"}} >
-          <h3 >Bug Overview</h3>
-        </div>
-
-        <div className="container border">
-          <div className="row my-2">
-            <div className="col-4">Title:</div>
-            <p className="col-8">{this.state.bug.title}</p>
-          </div>
-
-          <div className="row mb-2 border-top">
-            <div className="col-4">Rapported by</div>
-            <div className="col-8">
-              <div>
-                <label className="mb-0">{this.state.rapporter.firstname} {this.state.rapporter.lastname}</label>
-                <small className=" form-text text-muted mt-0 "> {this.state.rapportedAt.rapportDay} at
-                  {this.state.rapportedAt.rapportTime}</small>
+      <>
+        {!this.props.user._id ?
+          (<Redirect to="/" />)
+        :
+        (
+          <Container  fluid>
+            <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+            <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder"}}>
+              <div className="border pl-3 "  >
+                <h3 >Bug Overview</h3>
               </div>
-            </div>
-          </div>
+              <Row className="my-2">
+                <div className="col-4">Title:</div>
+                <p className="col-8">{this.state.bug.title}</p>
+              </Row>
 
-          <div className="row mb-2 border-top">
-            <div className="col-4">Services</div>
-            <div className="col-8">                
-              {this.state.services.map((el) => (
-                <div>
-                  <label className="mb-0">{el.name}</label>
-                  <small className=" form-text text-muted mt-0 ">{el.email}</small>
+              <Row className="mb-2 border-top">
+                <div className="col-4">Rapported by</div>
+                <div className="col-8">
+                  <div>
+                    <label className="mb-0">{this.state.rapporter.firstname} {this.state.rapporter.lastname}</label>
+                    <small className=" form-text text-muted mt-0 "> {this.state.rapportedAt.rapportDay} at
+                      {this.state.rapportedAt.rapportTime}</small>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </Row>
 
-          <div className="row mb-2 border-top">
-            <div className="col-4">Status</div>
-            <p className="col-8">{this.state.bug.status}</p>
-          </div>  
-            
-          <div className="row mb-2 border-top">
-            <div className="col-4">Severity</div>
-            <p className="col-8">{this.state.bug.severity}</p>
-          </div>
-            
-          <div className="row mb-2 border-top">
-            <div className="col-4">Description</div>
-            <p className="col-8">{this.state.bug.description}</p>
-          </div>
-          
-          <div className="row mb-2">
-            <div className="col-12">
-              <button className=" mt-3 btn btn-secondary" data-toggle="modal" data-target="#addSolutionModal" 
-                data-id="bugId0001" onClick={()=> this.setState({show:true})}> 
-                <i className="far fa-edit"></i> Add solution
-              </button>
-            </div>
-          </div>
-
-          <div className="row mt-5">
-            <div className="col-md-12 col-lg-12">
-              <div id="tracking">
-                <div className="border pl-3 text-white" style={{backgroundColor:"#7189da"}}>
-                  <h3 >Bug Solutions</h3>
-                </div>
-                <div className="tracking-list mt-1">
-
-                  {this.state.solutions.map((el, index) => (
-                    <VerticalTimeline  key={index} >
-                      <VerticalTimelineElement
-                        className="vertical-timeline-element--laravel VerticalTimelineElement vertical-timeline-element "
-                        contentStyle={{ background: 'rgb(64, 81, 182, 0.25)' }}
-                        contentArrowStyle={{ borderRight: '7px solid  rgb(64, 81, 182, 0.25)' }}
-                        date={<p>{el.date.rapportDayS}, {el.date.rapportTimeS}</p>}
-                        key={el.s._id}
-                        icon={<img src={el.s.user_id.imageURL} className="material-icons md-18" style={{ borderRadius: "50%", position: "absolute", top: "0", left:"0"  }} width="60" height="60" alt="" />}
-                        >
-                        <h4 className="vertical-timeline-element-title">{el.s.user_id.firstname} {el.s.user_id.lastname}</h4>
-                        <h5 className="vertical-timeline-element-subtitle">Status: {el.s.status}</h5>
-                        <p>
-                          {el.s.solution}
-                        </p>
-                      </VerticalTimelineElement>
-                    </VerticalTimeline>
+              <Row className="mb-2 border-top">
+                <div className="col-4">Services</div>
+                <div className="col-8">                
+                  {this.state.services.map((el) => (
+                    <div>
+                      <label className="mb-0">{el.name}</label>
+                      <small className=" form-text text-muted mt-0 ">{el.email}</small>
+                    </div>
                   ))}
-
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <Modal className="modal fade " id="addSolutionModal" tabIndex="-1" role="dialog" show={this.state.show}>
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="addSolutionModalLabel">Edit Service</h5>
-              <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={()=> this.setState({show:false, errorMessageEdit:[], dataId:"", name:"", phone:"", email:""})}>
-                <span >&times;</span>
-              </button>
-            </div>
-            
-            {this.state.errorMessage.length > 0 && (
-              <div> {this.state.errorMessage.map((el, index)=> 
-                (
-                <Alert key={index} variant={'danger'}>{el}</Alert>
-                ))} 
-              </div>
-            )}
-            
-            <form id="popup-add-solution" onSubmit={this.handleFormSubmit}>
-              <div className="modal-body">
-                <div className="form-group row">
-                  <label htmlFor="popup-bug-solution" className="col-form-label">Status:</label>
-                  <div className="col-sm-10 mt-2" onChange={this.handleChange}>
-                    <input className="ml-3" type="radio" name="status" defaultChecked value="Confirmed" /><label
-                      className="ml-1">Confirmed
-                      </label>
-                    <input className="ml-3" type="radio" name="status" value="In Progress" /><label className="ml-1">InProgress
-                      </label>
-                    <input className="ml-3" type="radio" name="status" value="Resolved" /><label className="ml-1">Resoveld</label>
+              </Row>
+
+              <Row className="mb-2 border-top">
+                <div className="col-4">Status</div>
+                <p className="col-8">{this.state.bug.status}</p>
+              </Row>  
+                
+              <Row className="mb-2 border-top">
+                <div className="col-4">Severity</div>
+                <p className="col-8">{this.state.bug.severity}</p>
+              </Row>
+                
+              <Row className="mb-2 border-top">
+                <div className="col-4">Description</div>
+                <p className="col-8">{this.state.bug.description}</p>
+              </Row>
+              
+              <Row className="mb-2">
+                <div className="col-12">
+                  <button className=" mt-3 btn btn-secondary" data-target="#addSolutionModal" 
+                    data-id="bugId0001" onClick={()=> this.setState({show:true})}> 
+                    <i className="far fa-edit"></i> Add solution
+                  </button>
+                </div>
+              </Row>
+
+              <Row className="mt-5">
+                <div className="col-md-12 col-lg-12">
+                  <div id="tracking">
+                    <div className="border pl-3 " style={{color: "#300032"}} >
+                      <h3 >Bug Solutions</h3>
+                    </div>
+                    <div className="tracking-list mt-1">
+
+                      {this.state.solutions.map((el, index) => (
+                        <VerticalTimeline  key={index} >
+                          <VerticalTimelineElement
+                            className="vertical-timeline-element--laravel VerticalTimelineElement vertical-timeline-element "
+                            contentStyle={{ background: 'rgb(64, 81, 182, 0.25)' }}
+                            contentArrowStyle={{ borderRight: '7px solid  rgb(64, 81, 182, 0.25)' }}
+                            date={<p>{el.date.rapportDayS}, {el.date.rapportTimeS}</p>}
+                            key={el.s._id}
+                            icon={<img src={el.s.user_id.imageURL} className="material-icons md-18" style={{ borderRadius: "50%", position: "absolute", top: "0", left:"0"  }} width="60" height="60" alt="" />}
+                            >
+                            <h4 className="vertical-timeline-element-title">{el.s.user_id.firstname} {el.s.user_id.lastname}</h4>
+                            <h5 className="vertical-timeline-element-subtitle">Status: {el.s.status}</h5>
+                            <p>
+                              {el.s.solution}
+                            </p>
+                          </VerticalTimelineElement>
+                        </VerticalTimeline>
+                      ))}
+
+                    </div>
                   </div>
-                  {/* <input id="popup-service-name" name="name" type="text" className="form-control" value={this.state.name} onChange={this.handleChange}/> */}
                 </div>
-
-                <div className="form-group row">
-                  <label htmlFor="popup-bug-solution" className="col-form-label">Severity:</label>
-                  <div className="col-sm-10 mt-2" onChange={this.handleChange}>
-                    <input className="ml-3" type="radio" name="severity" defaultChecked value="Critical" /><label
-                      className="ml-1">Critical
-                      </label>
-                    <input className="ml-3" type="radio" name="severity" value="High" /><label className="ml-1">High
-                      </label>
-                    <input className="ml-3" type="radio" name="severity" value="Medium" /><label className="ml-1">Medium</label>
-                    <input className="ml-3" type="radio" name="severity" value="Low" /><label className="ml-1">Low</label>
-                  </div>
+              </Row>
+            </Container>
+            
+            <Modal id="addSolutionModal" tabIndex="-1" role="dialog" show={this.state.show}>
+              <Modal.Header>
+                <Modal.Title id="addSolutionModalLabel">Edit Service</Modal.Title>
+                <Button type="button" onClick={()=> this.setState({show:false, errorMessageEdit:[], dataId:"", name:"", phone:"", email:""})}>
+                  <span >&times;</span>
+                </Button>
+              </Modal.Header>
+              
+              {this.state.errorMessage.length > 0 && (
+                <div> {this.state.errorMessage.map((el, index)=> 
+                  (
+                  <Alert key={index} variant={'danger'}>{el}</Alert>
+                  ))} 
                 </div>
-                <div className="form-group">
-                  <label htmlFor="popup-bug-solution" className="col-form-label">Solution:</label>
-                  <textarea id="sol" type="text" name="solution" rows="3" className="form-control"
-                  placeholder="Ex: Some solution..." onChange={this.handleChange}></textarea>
-                </div>             
-              </div>
-              <div className="modal-footer">
-                {/* <button type="reset" className="btn btn-secondary" data-dismiss="modal">Reset</button> */}
-                <button type="submit" className="btn btn-primary"><i className=" mr-1 far fa-save"></i>Save</button>
-              </div>
-            </form>   
-          </div>
-        </Modal>
-      </div>
+              )}
+              
+              <Form id="popup-add-solution" onSubmit={this.handleFormSubmit} onReset={this.handleReset}>
+                <Modal.Body>
+                  <Form.Group >
+                    <Form.Label htmlFor="popup-bug-solution" >Status:</Form.Label>
+                    <div className="col-sm-10 mt-2" onChange={this.handleChange}>
+                      <input className="ml-3" type="radio"  name="status" defaultChecked value="Confirmed" />
+                      <Form.Label className="ml-1">Confirmed</Form.Label>
+                      <input className="ml-3" type="radio"  name="status" value="In Progress" />
+                      <Form.Label className="ml-1">InProgress</Form.Label>
+                      <input className="ml-3" type="radio"   name="status" value="Resolved" />
+                      <Form.Label className="ml-1">Resoveld</Form.Label>
+                    </div>
+                  </Form.Group>
 
+                  <Form.Group>
+                    <Form.Label htmlFor="popup-bug-solution" className="col-form-label">Severity:</Form.Label>
+                    <div className="col-sm-10 mt-2" onChange={this.handleChange}>
+                      <input className="ml-3" type="radio" name="severity" defaultChecked value="Critical" />
+                      <Form.Label className="ml-1">Critical</Form.Label>
+                      <input className="ml-3" type="radio" name="severity" value="High" />
+                      <Form.Label className="ml-1">High</Form.Label>
+                      <input className="ml-3" type="radio" name="severity" value="Medium" />
+                      <Form.Label className="ml-1">Medium</Form.Label>
+                      <input className="ml-3" type="radio" name="severity" value="Low" />
+                      <Form.Label className="ml-1">Low</Form.Label>
+                    </div>
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label htmlFor="popup-bug-solution" className="col-form-label">Solution:</Form.Label>
+                    <FormControl as="textarea" id="sol"  name="solution" rows="3" 
+                    placeholder="Ex: Some solution..." onChange={this.handleChange}></FormControl>
+                  </Form.Group>             
+                </Modal.Body>
+                <Modal.Footer>
+                  <Button type="reset" variant="secondary" >Reset</Button>
+                  <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i>Save</Button>
+                </Modal.Footer>
+              </Form>   
+            </Modal>
+          </Container>
+        )}
+      </>  
     )
   }
 }

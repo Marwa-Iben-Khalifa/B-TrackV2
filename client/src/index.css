@@ -1,85 +1,30 @@
-@import url('https://fonts.googleapis.com/css?family=Numans');
-
-* {
-  box-sizing: border-box;
+body{
+  font-family: ubuntu-bold;
 }
-
-body {
-  min-height: 100vh;
+.row.s {
+  display: -ms-flexbox;
   display: flex;
-  font-weight: 400;
-  font-family: "Roboto",sans-serif;
+  -ms-flex-wrap: wrap;
+  flex-wrap: unset;
+  margin-right: 0px;
+  margin-left: 0px;
+  height: 100px;
 }
 
-body, html, .App, #root, .outer {
+.row {
+  
+  flex-wrap: unset;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.signEmail{
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 0px;
+}
+.container, .container-fluid, .container-lg, .container-md, .container-sm, .container-xl {
   width: 100%;
-  height: 100%;
+  padding-right: 5px;
+  padding-left: 5px;
 }
-
-.navbar-light {
-  background-color: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-}
-
-.outer {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.inner {
-  width: 450px;
-  margin: auto;
-  background: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
-  border-radius: 15px;
-  transition: all .3s;
-}
-
-.outer .form-control:focus {
-  border-color: #167bff;
-  box-shadow: none;
-}
-
-.outer h3 {
-  margin: 0;
-  line-height: 1;
-  padding-bottom: 20px;
-}
-
-.custom-control-label {
-  font-weight: 400;
-}
-
-.form-text:focus, form-field:focus, form-text:focus-within, form-field:focus-within, form-control:focus, form-control:focus-within, .form-field-container:focus, .form-field-container:focus-within, .form-field-containers:focus, .form-field-containers:focus-within {
-  color: #aaa !Important;
-}
-
-.form-elegant .modal-header {
-    border-bottom: none; }
-
-.modal-dialog .form-elegant .btn .fab {
-    color: #2196f3!important; }
-
-.form-elegant .modal-body, .form-elegant .modal-footer {
-    font-weight: 400; }
-  
- .btn-outline-secondary {
-      color: #a6c !important;
-      background-color: transparent !important;
-      border: 2px solid #a6c !important;
-  }
-  
-  
-
-.vertical-timeline:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 18px;
-  height: 100%;
-  width: 4px;
-  background:rgba(248, 249, 250);
-}
-

@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import service from '../api/service'
+import srv from '../api/service'
+import Navbar from "../navBar/Navbar"
+
+import { Button, Form, Row, Alert , Col, InputGroup, Table, Container, FormControl} from 'react-bootstrap';
+
 
 
 export default class NewBug extends Component {
@@ -32,12 +36,12 @@ export default class NewBug extends Component {
     event.preventDefault();
 
 
-    service.newBug(this.state.title, this.state.description, this.state.solution, this.state.services, this.state.status, this.state.severity)
+    srv.newBug(this.state.title, this.state.description, this.state.solution, this.state.services, this.state.status, this.state.severity)
     .then((res) => {      
       console.log("ok!")
       this.setState({title:"", description:"", solution:"", services: [], status:"", severity:"", errorMessage:[] });
       // this.props.updateUser(response);
-      this.props.history.push('/');        
+      this.props.history.push('/bugs-list');        
     })
     .catch((error)=> this.setState({errorMessage:error.response.data.message}))
   }
@@ -53,80 +57,101 @@ export default class NewBug extends Component {
     this.setState({[name]: target.value});
   }
 
+  handleReset = (event) => {
+    this.setState({title:"", description:"", solution:"", services: [], status:"", severity:"", errorMessage:[]  })
+  }
+
 
   render() {
+    console.log(this.props.user)
     return (
-      <div className="container-fluid">
+      <Container fluid>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder"}}>
+          <Form onSubmit={this.handleFormSubmit} onReset={this.handleReset}>
 
-        <form className="container w-75" onSubmit={this.handleFormSubmit}>
+            <Form.Group as={Row}>
+              <h3 className="col-sm-10 mt-1">New Bug</h3>
+              <small className="text-secondary form-text text-muted mt-0">
+                Fill all the fields then click on Add in order to create a new bug.
+              </small>
+            </Form.Group >
 
-          <div className="form-group row mt-5">
-            <h3 className="col-sm-2 col-form-label ">New Bug</h3>
-            <div className="col-sm-10 mt-1">
-              <p>Fill all the fields then click on Add in order to create a new bug.</p>
-            </div>
-          </div>
-          <div className="form-group row mt-5">
-            <label for="title" className="col-sm-2 col-form-label">Title</label>
-            <div className="col-sm-10">
-              <input id="title" type="text" name="title" className="form-control" placeholder="Ex: Error when..." onChange={this.handleChange}/>
-            </div>
-          </div>
-        
-          <div className="form-group row">
-            <label for="des" className="col-sm-2 col-form-label">Description</label>
-            <div className="col-sm-10">
-              <textarea id="des" placeholder="Ex: This error occur when..." type="text" name="description" rows="3"
-                className="form-control" onChange={this.handleChange}></textarea>
-            </div>
-          </div>
-          <div className="form-group row">
-            <label for="sol" className="col-sm-2 col-form-label">Solution</label>
-            <div className="col-sm-10">
-              <textarea id="sol" type="text" name="solution" rows="3" className="form-control"
-                placeholder="Ex: Some solution..." onChange={this.handleChange}></textarea>
-            </div>
-          </div>
+            <Form.Group as={Col} md="8"  htmlFor="title">
+              <Form.Label className="mb-3" as={Row}>Title:</Form.Label>
+              <Form.Control
+                type="text"
+                name="title"
+                value={this.state.title}
+                onChange={this.handleChange}
+                placeholder="Ex: Error when..."
+                id="title"
+              />
+              <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
+            </Form.Group>
 
-          <div className="form-group row">
-            <label className="col-sm-2 col-form-label">Services</label>
-            {/* afficher tous les service dans une boite select */}
-            {this.state.listOfServices.map( service => {
-              return (
-                <div className="form-check form-check-inline">
-                  <input className="ml-3 form-check-input" name="services" type="checkbox" value={service._id}  key={service._id} onChange={this.handleChange} />
-                  <label className="form-check-label" htmlFor={service.name}> {service.name}</label>
-                </div>
-              )})
-            } 
-            
-          </div>
+            <Form.Group as={Col} md="8">
+              <Form.Label className="mb-3" htmlFor="des" as={Row}>Description:</Form.Label>
+              <FormControl as="textarea" id="des"  name="description" rows="3" 
+              placeholder="Ex: Some solution..." onChange={this.handleChange}></FormControl>
+            </Form.Group>
+          
+            <Form.Group as={Col} md="8">
+              <Form.Label className="mb-3" htmlFor="sol" as={Row}>Solution:</Form.Label>
+              <FormControl as="textarea" id="sol"  name="solution" rows="3" 
+              placeholder="Ex: Some solution..." onChange={this.handleChange}></FormControl>
+            </Form.Group> 
 
-          <div className="form-group row">
-            <label className="col-sm-2 col-form-label" >Status</label>
-            <div className="col-sm-10" onChange={this.handleChange}>
-              <input type="radio" name="status" defaultChecked value="Confirmed" /><label className="ml-1">Confirmed </label>
-              <input className="ml-3" type="radio" name="status" value="In Progress" /> <label>In Progress </label>
-              <input className="ml-3" type="radio" name="status" value="Resolved" /> <label>Resolved </label>
-            </div>
-          </div>
+            <Form.Group as={Col} >
+              <Form.Label className="mb-3" as={Row}>Services:</Form.Label>
+              {this.state.listOfServices.map( service => {
+                return (
+                  <Form.Group id="formGridCheckbox">
+                    <Form.Check key={service._id} name="services" type="checkbox" label={service.name} value={service._id} onChange={this.handleChange}/>
+                  </Form.Group>
+                )})
+              } 
+              
+            </Form.Group>
 
-          <div className="form-group row">
-            <label className="col-sm-2 col-form-label" >Severity</label>
-            <div className="col-sm-10" onChange={this.handleChange}>
-              <input type="radio" name="severity" defaultChecked value="Critical" /><label className="ml-1">Critical </label>
-              <input className="ml-3" type="radio" name="severity" value="High" /> <label>High </label>
-              <input className="ml-3" type="radio" name="severity" value="Medium" /> <label>Medium </label>
-              <input className="ml-3" type="radio" name="severity" value="Low" /> <label>Low </label>
-            </div>
-          </div>
+            <Form.Group as={Col}>
+              <Form.Label className="mb-3" as={Row} >Status:</Form.Label>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="Confirmed" name="status" defaultChecked value="Confirmed" onChange={this.handleChange}/>
+              </Form.Group>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="InProgress" name="status" value="In Progress" onChange={this.handleChange}/>
+              </Form.Group>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="Resoveld" name="status" value="Resolved" onChange={this.handleChange}/>
+              </Form.Group>
+                
+            </Form.Group>
+
+            <Form.Group as={Col}>
+              <Form.Label className="mb-3" as={Row} >Severity:</Form.Label>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="Critical" name="severity" defaultChecked value="Critical" onChange={this.handleChange}/>
+              </Form.Group>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="High" name="severity" value="High" onChange={this.handleChange}/>
+              </Form.Group>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="Medium" name="severity" value="Medium" onChange={this.handleChange}/>
+              </Form.Group>
+              <Form.Group id="formGridRadio">
+                <Form.Check type="radio" label="Low" name="severity" value="Low" onChange={this.handleChange}/>
+              </Form.Group>
+            </Form.Group>
 
 
-          <button type="submit" className="btn btn-primary"><i className=" mr-1 far fa-save"></i> Create</button>
-          <button type="reset" className="btn btn-secondary">Reset</button>
+            <Button type="reset" variant="secondary" >Reset</Button>
+            <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i>Save</Button>
 
-        </form>
-      </div>
+          </Form>
+
+        </Container>
+      </Container>
     
     )
   }

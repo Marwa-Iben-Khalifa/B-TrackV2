@@ -46,7 +46,7 @@ export default class  Login extends React.Component {
         ) : (
           <Popin  one={(
             <>
-              <Modal className="modal fade " id="orangeModalSubscription" tabindex="-1" role="dialog" show={true} style={{backgroundColor:"#515ea261"}} >
+              <Modal className="modal fade " id="orangeModalSubscription" tabIndex="-1" role="dialog" show={true} style={{backgroundColor:"#515ea261"}} >
                 <Form className="modal-content form-elegant" onSubmit={this.handleSubmit} onReset={this.handleReset}>
                   <Modal.Header className="modal-header text-center">
                       <h4 className="modal-title  w-100 font-weight-bold py-2" style={{color:"#0e3662" , fontSize:"40px"}}>Log In</h4>
@@ -57,18 +57,18 @@ export default class  Login extends React.Component {
                     )}
                   <Modal.Body className="modal-body">
                     <FormGroup className="md-form mb-2">
-                      <i class="fa fa-envelope prefix grey-text"></i>
+                      <i className="fa fa-envelope prefix grey-text"></i>
                       <input type="email" name="email" placeholder="Email adress" className="form-control validate" id="inputEmail"  value={this.state.email} onChange={this.handleChange} />
                       <label data-error="wrong" data-success="right" htmlFor="inputEmail"></label>
                     </FormGroup>
                     <FormGroup className="md-form mb-2">
-                      <i class="fas fa-lock prefix grey-text"></i>
+                      <i className="fas fa-lock prefix grey-text"></i>
                       <input type="password" name="password" placeholder="Password" className="form-control validate" id="inputPassword"  value={this.state.password} onChange={this.handleChange}/>
                       <label htmlFor="inputPassword"></label>
                     </FormGroup>
                   </Modal.Body>
                   <div className="modal-footer justify-content-center mb-3">
-                    <Button type="submit" size="lg" className="btn btn-block btn-rounded  btn-outline-secondary " style={{fontWeight: "bold"}}>LogIn<i class="fas fa-paper-plane-o ml-1"></i></Button>
+                    <Button type="submit" size="lg" className="btn btn-block btn-rounded  btn-outline-secondary " style={{fontWeight: "bold"}}>LogIn<i className="fas fa-paper-plane-o ml-1"></i></Button>
                     <Button type="reset" className="btn btn-black">Reset</Button>
                   </div>
                 </Form>
