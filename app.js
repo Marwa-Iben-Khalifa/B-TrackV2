@@ -47,7 +47,7 @@ app.use(session({
 require('./passport')(app);
 app.use('/api', require('./routes/auth-routes'));
 app.use('/api', require('./routes/fileUploader'));
-// app.use('/api', require('./routes/dashboard'));
+app.use('/api', require('./routes/dashboard'));
 app.use('/api', require('./routes/bugs'));
 app.use('/api', require ('./routes/services'))
 
