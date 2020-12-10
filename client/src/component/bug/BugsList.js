@@ -60,7 +60,7 @@ export default class BugsList extends Component {
 
     // sort by date
     if (this.state.sortby === 'date'){
-      bugsList.sort((a,b) => a.bug.rapportedAt.localeCompare(b.bug.rapportedAt))
+      bugsList.sort((a,b) => b.bug.rapportedAt.localeCompare(a.bug.rapportedAt))
     }
     
     // Filter `Bugs` with `query`
@@ -116,8 +116,19 @@ export default class BugsList extends Component {
                     <small className="text-secondary form-text text-muted mt-0">{el.rapportedAt.rapportDay} at
                       {el.rapportedAt.rapportTime}</small>
                   </td>
-                  <td>{el.bug.severity}</td>
-                  <td>{el.bug.status}</td>
+                  {el.bug.severity=== "Critical" || el.bug.severity=== "High" ?
+                    <td style={{color:"red"}}>{el.bug.severity}</td>
+                  : el.bug.severity=== "Medium" ?
+                  <td style={{color:"orange"}}>{el.bug.severity}</td>
+                  : <td style={{color:"green"}}>{el.bug.severity}</td>
+                  }
+                  
+                  {el.bug.status=== "Confirmed"  ?
+                    <td style={{color:"red"}}>{el.bug.status}</td>
+                  : el.bug.status=== "In Progress" ?
+                  <td style={{color:"orange"}}>{el.bug.status}</td>
+                  : <td style={{color:"green"}}>{el.bug.status}</td>
+                  }
                   <td className="d-flux">
                     <Button variant="danger" onClick={(event)=>{this.deleateBug(el.bug._id)}}><i
                       className="fas fa-trash-alt"></i></Button>

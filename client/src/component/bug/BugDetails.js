@@ -94,7 +94,7 @@ export default class BugDetails extends React.Component {
                 <h3 >Bug Overview</h3>
               </div>
               <Row className="my-2">
-                <div className="col-4">Title:</div>
+                <div className="col-4">Title</div>
                 <p className="col-8">{this.state.bug.title}</p>
               </Row>
 
@@ -123,12 +123,24 @@ export default class BugDetails extends React.Component {
 
               <Row className="mb-2 border-top">
                 <div className="col-4">Status</div>
-                <p className="col-8">{this.state.bug.status}</p>
+                {this.state.bug.status=== "Confirmed"  ?
+                  <p style={{color:"red"}} className="col-8">{this.state.bug.status}</p>
+                : this.state.bug.status=== "In Progress" ?
+                <p style={{color:"orange"}} className="col-8">{this.state.bug.status}</p>
+                : <p style={{color:"green"}} className="col-8">{this.state.bug.status}</p>
+                }
               </Row>  
                 
               <Row className="mb-2 border-top">
                 <div className="col-4">Severity</div>
-                <p className="col-8">{this.state.bug.severity}</p>
+                {this.state.bug.severity=== "Critical" || this.state.bug.severity=== "High" ?
+                  <p className="col-8" style={{color:"red"}}>{this.state.bug.severity}</p>
+                : this.state.bug.severity=== "Medium" ?
+                  <p className="col-8" style={{color:"orange"}}>{this.state.bug.severity}</p>
+                : 
+                  <p className="col-8" style={{color:"green"}}>{this.state.bug.severity}</p>
+                }
+                
               </Row>
                 
               <Row className="mb-2 border-top">
