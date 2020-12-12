@@ -55,7 +55,7 @@ export default class NavBar extends Component {
                   alt="React Bootstrap logo"
                 />   
                 <NavDropdown title={this.props.user.firstname} eventkey={2} href="/">                    
-                  <NavDropdown.Item href={`/user/${this.props.user._id}/edit`} >My Account</NavDropdown.Item>
+                  <NavDropdown.Item href={`/profil`} >My Account</NavDropdown.Item>
                   <NavDropdown.Item onClick={this.logout} >Logout</NavDropdown.Item>                
                 </NavDropdown>
               </Nav>

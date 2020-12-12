@@ -106,7 +106,7 @@ export default class NewBug extends Component {
           <Form onSubmit={this.handleFormSubmit} onReset={this.handleReset}>
 
             <Form.Group as={Row}>
-              <h3 className="col-sm-10 mt-1">New Bug</h3>
+              <h3 className="col-sm-10 mt-1" >New Bug</h3>
               <small className="text-secondary form-text text-muted mt-0">
                 Fill all the fields then click on Add in order to create a new bug.
               </small>

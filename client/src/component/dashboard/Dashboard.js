@@ -114,120 +114,67 @@ export default class Dashboard extends Component {
     return (
       <Container fluid >
         <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
-        <Container fluid style={{marginBottom:"60px", height:"100%" , color: "#300032", fontWeight:"bolder"}}>
-          <Card
-            bg="danger"
-            text={'white'}
-            style={{ width: '20rem' }}
-            className="mb-2"
-          >
-            <Card.Header>{this.state.priorityBugs.length+1} Critical Bugs</Card.Header>
-            <Card.Body>
-              <Card.Title>{this.state.priorityBugs.map((el)=>(
-                    <tr key={el._id}>
-                      <td>{el.title}</td>
-                      <td >
-                        <Link to={`/${el._id}/bug-details`}><Button  variant="warning">Go</Button></Link>
-                      </td>
-                    </tr>
-                  ))} </Card.Title>
-            </Card.Body>
-                </Card>
-                  {/* <div className="row"> */}
-                    {/* <div className="col align-self-center"> */}
-                    <Card
-                      bg="ligth"
-                      text={'black'}
-                      // style={{ width: '40rem' }}
-                      className="mb-2"
-                    >
-                      <Card.Header>Chart By Status</Card.Header>
-                      <Card.Body>
-                        <Card.Title>
-                          <Polar   
-                            data={this.state.dataByStatus}
-                            options={{
-                              title:{
-                                display:false,
-                                // text:'Chart By Status',
-                                // fontSize:16
-                              },
-                              legend:{
-                                display:true,
-                                position:'top'
-                              },
-                            }}
-                          />
-                        </Card.Title>
-                      </Card.Body>
-                    </Card>
-                
-              {/* </div> */}
-              {/* <div className="col align-self-center"> */}
-                    <Card
-                      bg="ligth"
-                      text={'black'}
-                      // style={{ width: '40rem' }}
-                      className="mb-2"
-                    >
-                      <Card.Header>Chart By Status</Card.Header>
-                      <Card.Body>
-                        <Card.Title>
-                          <Polar   
-                            data={this.state.dataBySeverity}
-                            options={{
-                              title:{
-                                display:false,
-                                // text:'Chart By Status',
-                                // fontSize:16
-                              },
-                              legend:{
-                                display:true,
-                                position:'top'
-                              },
-                            }}
-                          />
-                        </Card.Title>
-                      </Card.Body>
-                    </Card>
-                {/* <Polar  height={150}
-                  data={this.state.dataBySeverity}
+        <Container fluid style={{textAlign:"left" ,marginBottom:"60px", height:"100%" , color: "#300032", fontWeight:"bolder"}}>
+          <div >
+            <Card
+              bg="ligth"
+              text={'black'}
+              // style={{ width: '40rem' }}
+              className="mb-2"
+              >
+              <Card.Header>Charts</Card.Header>
+              <Card.Body>
+                <Polar   height={100}
+                  data={this.state.dataByStatus}
                   options={{
                     title:{
-                      display:true,
-                      text:'Chart By Severity',
-                      fontSize:20
+                      display:false,
+                      text:'Chart By Status',
+                      fontSize:16
                     },
                     legend:{
                       display:true,
-                      position:'top'
-                    }
+                      position:'left'
+                    },
                   }}
-                /> */}
-              {/* </div> */}
-            {/* </div> */}
-            <div className=" col-sm-6 ">
-              <Table striped bordered hover responsive="sm">
-                <thead>
-                  <tr>
-                    <th></th>
-                    <th>Title</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.priorityBugs.map((el)=>(
-                    <tr key={el._id}>
-                      <td>🔴</td>
-                      <td>{el.title}</td>
-                      <td className="d-flux">
-                        <Link to={`/${el._id}/bug-details`}><Button  variant="info"><i className="fas fa-eye"></i></Button></Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div> 
+                />
+  
+                <Polar   height={100}
+                  data={this.state.dataBySeverity}
+                  options={{
+                    title:{
+                      display:false,
+                      text:'Chart By Status',
+                      fontSize:16
+                    },
+                    legend:{
+                      display:true,
+                      position:'left'
+                    },
+                  }}
+                />
+              </Card.Body>
+            </Card>
+            <Card
+              bg="ligth"
+              text={'black'}
+              style={{ width: '20rem' }}
+              className="mb-2"
+              >
+              <Card.Header>{this.state.priorityBugs.length} Critical Bugs</Card.Header>
+              <Card.Body>
+                <Card.Title>{this.state.priorityBugs.map((el)=>(
+                  <ul key={el._id}>
+                    <li >
+                      <i style={{color:"red"}} className="fas fa-exclamation-triangle"></i>
+                      <Link to={`/${el._id}/bug-details`} style={{color: "black"}}>{el.title}</Link>
+                    </li>
+                  </ul>
+                  ))} 
+                </Card.Title>
+              </Card.Body>
+            </Card>
+          </div> 
         </Container>
         <Footer/>
         

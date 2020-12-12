@@ -73,13 +73,13 @@ export default class userProfil extends Component {
   }
 
   handleFormSubmit = (event) => {
-    event.preventDefault();
     const {firstname, lastname, service, role, imageURL} = this.state
     console.log("state est : ",this.state)
     srv.service.put(`/${this.state._id}/edit`, {firstname, lastname, service, role, imageURL})
     .then((response) => {  
         this.props.updateUser(response); 
         this.setState({successMessage: "profile updated successfully" });
+        event.preventDefault();
         console.log('then', response)     
     })
     .catch((error)=> this.setState({errorMessage:error.response.data.message}))
@@ -188,7 +188,7 @@ export default class userProfil extends Component {
               <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
             </Form.Group>
 
-            <Row className="row s">
+            <Row style={{paddingLeft: "16px"}}>
               <FormGroup className="md-form custom-file">
                 <i className="fa fa-camera prefix grey-text"></i>
                 <input type="file" className="custom-file-input" name="image" id="input-image" onChange={this.handleUpload}/>
@@ -218,8 +218,10 @@ export default class userProfil extends Component {
                 </Form.Control>       
               </Col>              
             </Row>
-            <button type="submit" className="btn btn-primary mt-4"><i className=" mr-1 far fa-save"></i>Save</button>
-            <button type="reset" className="btn btn-secondary mt-4">Reset</button>
+            <Row >
+              <button type="submit" className="btn btn-primary mt-4" ><i className=" mr-1 far fa-save" ></i>Save</button>
+              <button type="reset" className="btn btn-secondary mt-4">Reset</button>
+            </Row>
           </Form>
                     
           <Form className="mt-5  border-top pt-4"  onSubmit={this.handleFormSubmitPassword } onReset={this.handleResetPassword}>
@@ -249,8 +251,10 @@ export default class userProfil extends Component {
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
               </Form.Group>
             </Row>
-            <button type="submit" className="btn btn-primary mt-4"><i className=" mr-1 far fa-save"></i>Save Password</button>
-            <button type="reset" className="btn btn-secondary mt-4">Reset</button>
+            <Row >
+              <button type="submit" className="btn btn-primary mt-4"><i className=" mr-1 far fa-save"></i>Save Password</button>
+              <button type="reset" className="btn btn-secondary mt-4">Reset</button>
+            </Row>
           </Form>
         </Container>
         <Footer/>
