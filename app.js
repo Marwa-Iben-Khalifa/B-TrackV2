@@ -50,6 +50,7 @@ app.use('/api', require('./routes/fileUploader'));
 app.use('/api', require('./routes/dashboard'));
 app.use('/api', require('./routes/bugs'));
 app.use('/api', require ('./routes/services'))
+app.use('/api', require ('./routes/user-profil'))
 
 
 // const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);

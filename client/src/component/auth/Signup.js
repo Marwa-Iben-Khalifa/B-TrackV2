@@ -65,7 +65,7 @@ export default class Signup extends Component {
     this.setState({[name]: value});
   }
 
-  handelUpload=(event) =>{
+  handleUpload=(event) =>{
     const uploadData = new FormData();
     uploadData.append('imageURL', event.target.files[0]);
     service.upload(uploadData)
