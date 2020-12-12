@@ -145,10 +145,10 @@ export default class Signup extends Component {
                     </Row>
 
                     <Row className="row s">
-                      <FormGroup className="md-form  custom-file" >                  
+                      <FormGroup className="md-form custom-file">
                         <i className="fa fa-camera prefix grey-text"></i>
-                        <Form.File htmlFor="input-image"type="file" name="input-image" className="custom-file-input" id="input-image"  onChange={this.handelUpload} />
-                        <label htmlFor="input-image">Choose Avatar</label>                  
+                        <input type="file" className="custom-file-input" name="image" id="input-image" onChange={this.handleUpload}/>
+                        <label  htmlFor="input-image" value={this.state.imageURL} >Choose Avatar</label>
                       </FormGroup>
                     </Row>
 

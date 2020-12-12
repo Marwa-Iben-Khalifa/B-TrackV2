@@ -87,7 +87,7 @@ export default class NewBug extends Component {
         </Button>
       </div>
     )
-}
+  }
 
   render() {
     if (this.state.user === null) return this.showContainer()

@@ -58,7 +58,7 @@ router.put('/:id/edit-password',[
   const validationErrors = validationResult(req);
 
   if (req.body.password != req.body.confirmPassword) {
-    res.status(400).json({message:'password and confirm password fields are not identical.'})
+    res.status(400).json({message:['password and confirm password fields are not identical.']})
   }
   if (!validationErrors.isEmpty()) {
     res.status(400).json({message:validationErrors.errors.map(e => e.msg) })
