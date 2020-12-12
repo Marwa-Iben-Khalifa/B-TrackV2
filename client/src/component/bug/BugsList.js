@@ -107,7 +107,7 @@ export default class BugsList extends Component {
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
-        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
+        <Container className="border"style={{ color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
           <h2 >Bugs list</h2>
           <Row className="fluid">
             <Form.Control as="select"
@@ -123,8 +123,8 @@ export default class BugsList extends Component {
               <option value="rapporter">Rapporter</option> 
               <option value="date">Date</option>                    
             </Form.Control>
-            <InputGroup className="col-md-4 md-form ">
-              <i className="fas fa-search prefix grey-text" style={{left: "0px"}}></i>
+            <InputGroup className="col-md-4 md-form " style={{left: "10px"}}>
+              <i className="fas fa-search prefix grey-text" style={{left: "0px"}} ></i>
               <Form.Control className="md-form"  type="search" placeholder="Search" value={this.state.query} onChange={this.handleQuery} />
             </InputGroup>
           </Row>
@@ -147,11 +147,13 @@ export default class BugsList extends Component {
                     <small className="text-secondary form-text text-muted mt-0">{el.rapportedAt.rapportDay} at
                       {el.rapportedAt.rapportTime}</small>
                   </td>
-                  {el.bug.severity=== "Critical" || el.bug.severity=== "High" ?
-                    <td style={{color:"red"}}>{el.bug.severity}</td>
+                  {el.bug.severity=== "Critical"  ?
+                    <td style={{color:"#752B3C"}}><i className="fas fa-angle-double-up fa-2x"></i></td>
+                  : el.bug.severity=== "High" ? 
+                    <td style={{color:"red"}}><i className="fas fa-angle-double-up fa-2x"></i></td>
                   : el.bug.severity=== "Medium" ?
-                  <td style={{color:"orange"}}>{el.bug.severity}</td>
-                  : <td style={{color:"green"}}>{el.bug.severity}</td>
+                  <td style={{color:"orange"}}><i className="fas fa-angle-double-up fa-2x"></i></td>
+                  : <td style={{color:"green"}}><i className="fas fa-angle-double-down fa-2x"></i></td>
                   }
                   
                   {el.bug.status=== "Confirmed"  ?
@@ -160,7 +162,7 @@ export default class BugsList extends Component {
                   <td style={{color:"orange"}}>{el.bug.status}</td>
                   : <td style={{color:"green"}}>{el.bug.status}</td>
                   }
-                  <td className="d-flux">
+                  <td className="d-flex flex-row-reverse" style={{border: "none"}}>
                     <Button variant="danger" onClick={(event)=>{this.deleateBug(el.bug._id)}}><i
                       className="fas fa-trash-alt"></i></Button>
                     <Link to={`/${el.bug._id}/bug-details`}><Button  variant="info"><i className="fas fa-eye"></i></Button></Link>

@@ -146,7 +146,7 @@ export default class CRUDServices extends Component {
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
-        <Container className="border"style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px", height:"100%"}}  >
+        <Container className="border"style={{color: "#300032", fontWeight:"bolder", marginBottom:"60px", height:"100%"}}  >
           <h2 >Services list</h2>
           <Row className="fluid">
             <Form.Control as="select"
@@ -182,7 +182,7 @@ export default class CRUDServices extends Component {
                   <td>{service.name}</td>
                   <td>{service.phone}</td>
                   <td>{service.email}</td>
-                  <td className="d-flux">
+                  <td className="d-flex flex-row-reverse">
                     <Button variant="danger" onClick={(event)=>{this.deleateService( service._id)}}>
                       <i className="fas fa-trash-alt" ></i></Button>
                     <Button  variant="info"  data-target="#editModal" onClick={()=> this.setState({show:true, dataId:service._id, name:service.name, phone:service.phone, email:service.email })}> 
@@ -220,9 +220,9 @@ export default class CRUDServices extends Component {
                   placeholder="Mail" value={this.state.email} onChange={this.handleChange}/>
               </Col>
                     
-              <Col sm>
+              <Col sm className="d-flex flex-row-reverse">
                 <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i></Button>
-                <Button type="reset" variant="secondary" >Reset</Button>
+                <Button type="reset" variant="secondary" ><i className="fas fa-trash-alt "></i></Button>
               </Col>
             </Row>
           </Form>
