@@ -57,7 +57,7 @@ export default class Signup extends Component {
       })
       .catch((error)=> this.setState({errorMessage:error.response.data.message}))
   })
-    .catch((error)=> this.setState({errorMessage:error.response.data.message}))
+    .catch((error)=> console.log("error", error))
   }
 
   handleChange = (event) => {  

@@ -77,7 +77,7 @@ router.post('/signup', [
       .then(() => {
         req.login(aNewUser, (err) => {
           if (err) {
-            return res.status(500).json({message: 'Login after signup went bad.'});
+            return res.status(500).json({message: ['Login after signup went bad.']});
             
           }
       

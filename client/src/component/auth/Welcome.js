@@ -12,7 +12,7 @@ import Popin from '../Popin.js';
 
 export default class Welcome extends Component {
   state={
-  
+    user:null
   }
 
   render() {
@@ -22,7 +22,7 @@ export default class Welcome extends Component {
         {this.props.user._id ? (
         <Redirect to="/dashboard" user={this.props.user}/>
         ) : (
-        <Popin one={(
+        // <Popin one={(
           <div style={{marginBottom:"60px", height:"100%"}}>
             <Navbar  user={this.props.user}/>
             <Jumbotron fluid className="mb-5">
@@ -38,7 +38,8 @@ export default class Welcome extends Component {
             
            <Details/>
            <Footer/>
-          </div>)} />
+          </div>
+          // )} />
         )}
       </div>
     )
