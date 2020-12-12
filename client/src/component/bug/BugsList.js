@@ -102,8 +102,8 @@ export default class BugsList extends Component {
       bugsList = bugsList.filter(b => b.bug.title.includes(query))
     } }
     console.log(this.props.updateUser)
-    if (this.state.user === null) return this.showContainer()
-    if (this.state.user === false) return <Redirect to="/"/>
+    // if (this.state.user === null) return this.showContainer()
+    // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
