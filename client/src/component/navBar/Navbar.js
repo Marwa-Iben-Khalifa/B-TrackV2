@@ -18,25 +18,6 @@ export default class NavBar extends Component {
 
   initialNav=()=> {
     return(
-      <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" >
-            <Redirect to="/"/>
-            <Navbar.Brand href="#home"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="mr-auto" >
-                <Nav.Link href="/signup">SignUp</Nav.Link>
-                <Nav.Link href="/login">LogIn</Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
-    )
-  }
-
-
-  render() {
-    if( this.props.user === {} || this.props.user === false) return this.initialNav()
-    return (
-      
           <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{textAlign:"left"}}>
             <Navbar.Brand href="#home"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -63,6 +44,25 @@ export default class NavBar extends Component {
               </Nav>
             </Navbar.Collapse>
           </Navbar>
+    )
+  }
+
+
+  render() {
+    if( this.props.user._id) return this.initialNav()
+    return (
+      
+      <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" >
+      <Redirect to="/"/>
+      <Navbar.Brand href="#home"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Collapse id="responsive-navbar-nav">
+        <Nav className="mr-auto" >
+          <Nav.Link href="/signup">SignUp</Nav.Link>
+          <Nav.Link href="/login">LogIn</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
         
     )
   }
