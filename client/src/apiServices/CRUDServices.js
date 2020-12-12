@@ -38,7 +38,7 @@ export default class CRUDServices extends Component {
   }
 
   getAllServices = () =>{
-    axios.get(`http://localhost:3001/api/services`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/services`)
     .then(responseFromApi => {
       this.setState({
         listOfServices: responseFromApi.data.servicesFromDB
@@ -47,7 +47,7 @@ export default class CRUDServices extends Component {
   }
 
   deleateService=(id)=> {
-    axios.get(`http://localhost:3001/api/delete-service/${id}`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/delete-service/${id}`)
     .then(
       this.getAllServices()
     )
@@ -102,20 +102,20 @@ export default class CRUDServices extends Component {
   }
 
   showContainer = () => {
-      return(
-        <div>
-          <Button variant="primary" disabled>
-            <Spinner
-              as="span"
-              animation="grow"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
-            Loading...
-          </Button>
-        </div>
-      )
+    return(
+      <div>
+        <Button variant="primary" disabled>
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          Loading...
+        </Button>
+      </div>
+    )
   }
   
   render() {

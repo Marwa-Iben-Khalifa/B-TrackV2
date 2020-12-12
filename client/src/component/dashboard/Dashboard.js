@@ -39,14 +39,14 @@ export default class Dashboard extends Component {
   }
 
   getPriorityBugs = () =>{
-    axios.get(`http://localhost:3001/api/priority`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/priority`)
     .then(responseFromApi => {
       this.setState({priorityBugs: responseFromApi.data.result})
     })
   }
 
   getDataByStatus = () =>{
-    axios.get(`http://localhost:3001/api/repportByStatus`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/repportByStatus`)
     .then(responseFromApi => {
       this.setState({dataByStatus:{
         labels: responseFromApi.data.bugs.bugTypes,
@@ -67,7 +67,7 @@ export default class Dashboard extends Component {
   }
   
   getDataBySeverity = () =>{
-    axios.get(`http://localhost:3001/api/repportBySeverity`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/repportBySeverity`)
     .then(responseFromApi => {
       this.setState({dataBySeverity:{
         labels: responseFromApi.data.bugs.bugTypes,

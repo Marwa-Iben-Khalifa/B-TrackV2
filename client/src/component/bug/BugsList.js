@@ -27,7 +27,7 @@ export default class BugsList extends Component {
   }
 
   deleateBug=(id)=> {
-    axios.get(`http://localhost:3001/api/${id}/delete`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/${id}/delete`)
     .then(
       this.getBugsFromApi()
     )

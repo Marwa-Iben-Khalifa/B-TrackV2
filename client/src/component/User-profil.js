@@ -27,7 +27,7 @@ export default class userProfil extends Component {
   
 
   getAllServices = () =>{
-    axios.get(`http://localhost:3001/api/findServices`)
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/findServices`)
     .then(responseFromApi => {
       this.setState({
         listOfServices: responseFromApi.data
