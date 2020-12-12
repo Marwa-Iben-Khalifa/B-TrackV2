@@ -13,7 +13,10 @@ const app_name = require('./package.json').name;
 const MongoStore = require('connect-mongo')(session);
 
 mongoose
-  .connect(process.env.DB_CONNECTION ||'mongodb://localhost/b-trackv2', {useNewUrlParser: true})
+  .connect(process.env.DB_CONNECTION ||'mongodb://localhost/b-trackv2', 
+  {useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
