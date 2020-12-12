@@ -13,7 +13,7 @@ const app_name = require('./package.json').name;
 const MongoStore = require('connect-mongo')(session);
 
 mongoose
-  .connect('mongodb://localhost/b-trackv2', {useNewUrlParser: true})
+  .connect(process.env.DB_CONNECTION ||'mongodb://localhost/b-trackv2', {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -33,7 +33,7 @@ app.use(cookieParser());
 const cors = require('cors');
 app.use(cors({
   credentials: true,
-  origin: ['http://localhost:3000']
+  origin: "*"
 }));
 
 
