@@ -11,7 +11,7 @@ import Footer from "../navBar/Footer"
 
 
 export default class Signup extends Component {
-    state = { 
+    state = {
       firstname: "",
       lastname: "" ,
       service: "",
@@ -28,19 +28,21 @@ export default class Signup extends Component {
   
     
   
-    getAllServices = () =>{
-      axios.get(`${process.env.REACT_APP_APIURL || ""}/findServices`)
-      .then(responseFromApi => {
-        this.setState({
-          listOfServices: responseFromApi.data
-        })
+  getAllServices = () =>{
+    axios.get(`${process.env.REACT_APP_APIURL || ""}/findServices`)
+    .then(responseFromApi => {
+      this.setState({
+        listOfServices: responseFromApi.data
       })
-    }
+    })
+  }
   
-    componentDidMount() {
-      this.getAllServices();
-    }
+  componentDidMount() {
+    this.getAllServices();
+  }
   
+  
+
   handleFormSubmit = (event) => {
     event.preventDefault();
 
@@ -84,12 +86,10 @@ export default class Signup extends Component {
 
 
   render() {
+    {this.props.user._id  && (
+      <Redirect to="/dashboard" />)}
     return (
       <>
-        {this.props.user._id ? (
-          <Redirect to="/dashboard" />
-        ) : (
-            <>
               <Modal className="modal fade" id="orangeModalSubscription" tabIndex="-1" role="dialog" show={true} style={{backgroundColor:"#515ea261"}} >
                 <Form className="modal-content form-elegant container-fluid " onSubmit={this.handleFormSubmit} onReset={this.handleReset}> 
                   <Modal.Header className="modal-header text-center">
@@ -180,8 +180,7 @@ export default class Signup extends Component {
                   </Modal.Body>
                 </Form>  
               </Modal>
-            </>
-        )}
+            
       </>
       
         
