@@ -1,28 +1,29 @@
 import React, { Component } from 'react'
-import service from '../api/service';
+import srv from '../api/apiServ';
 import { Redirect, Link } from 'react-router-dom';
-import {Navbar, NavDropdown, Nav}from 'react-bootstrap'
+import {Navbar, NavDropdown, Nav, Spinner, Button}from 'react-bootstrap'
 
 export default class NavBar extends Component {
   state={
     user:{...this.props.user}
   }
 
+
   logout = (event) => {
-    service.logout()
+    srv.logout()
       .then(response => {       
         this.props.updateUser(false);
+        this.props.history.push('/');
       })
     ;
   }
 
-
   render() {
     return (
       <>
-        { this.props.user === {} || this.props.user === false ?(
+        { !this.props.user._id  ?(
           <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" >
-            <Redirect to="/"/>
+            {/* <Redirect to="/"/> */}
             <Navbar.Brand href="#home"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">

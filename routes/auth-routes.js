@@ -24,25 +24,23 @@ router.post("/login", (req, res, next) => {
     // save user in session
     req.login(theUser, (err) => {
       if (err) {
-        res.status(500).json({message: 'Session save went bad.'});
+        res.status(500).json({message: ['Session save went bad.']});
         return;
       }
-
       // We are now logged in (thats why we can also send req.user)
       res.status(200).json(theUser);
-      console.log(req.user)
+      console.log("user",req.user)
     });
   })(req, res, next);
 });
 
-router.get("/findServices", (req, res, next) => {
-  Service.find({})
-    .populate('service')
+router.get("/services", (req, res, next) => {
+  Service.find()
     .then(servicesFromDB => {
-      res.json(servicesFromDB)
+      res.status(200).json(servicesFromDB)
     })
     .catch(err => {
-      res.json(err);
+      res.status(400).json(err);
     })
 });
 
@@ -78,14 +76,12 @@ router.post('/signup', [
         req.login(aNewUser, (err) => {
           if (err) {
             return res.status(500).json({message: ['Login after signup went bad.']});
-            
-          }
-      
+          }      
           res.status(201).json(aNewUser);
         });
       })
       .catch(err => {
-        res.status(500).json({ message: 'Saving user to database went wrong.' });
+        res.status(500).json({ message: ['Saving user to database went wrong.'] });
       })
     }
   }
@@ -98,23 +94,37 @@ router.get("/logout", (req, res) => {
 
 router.get("/loggedin", (req, res, next) => {
   if (req.user) {
-    return res.status(200).json(req.user);
-    
+    return res.status(200).json(req.user);    
   }
-
-  res.status(403).json({message: 'Unauthorized'});
+  res.status(403).json({message: ['Unauthorized']});
 });
 
+
+// updating User informations && password
 router.post("/edit", (req, res, next) => {
   // Check user is logged in
   if (!req.user) {
-    res.status(401).json({message: "You need to be logged in to edit your profile"});
+    res.status(401).json({message: ["You need to be logged in to edit your profile"]});
     return;
   }
 
   // Updating `req.user` with each `req.body` field (excluding some internal fields `cannotUpdateFields`)
-  const cannotUpdateFields = ['_id', 'password'];
+  const cannotUpdateFields = ['_id', 'email'];
   Object.keys(req.body).filter(key => cannotUpdateFields.indexOf(key) === -1).forEach(key => {
+    
+    {(req.body.password.length > 7 && req.body.confirmPassword.length > 7) ?
+      (
+        req.body.password === req.body.confirmPassword ?
+        req.user.passwordHash = bcrypt.hashSync(req.body.password, 10)
+        :
+        res.status(400).json({message:['password and confirm password fields are not identical.']})
+      )
+      : 
+      (req.body.password && req.body.confirmPassword && res.status(400).json({message:['password must be at least 8 chars long.']}) )
+    }
+    if (req.body.password && !req.body.confirmPassword){
+      res.status(400).json({message:['You must provide the both password & confirm password']})
+    }
     req.user[key] = req.body[key];
   });
 
@@ -129,7 +139,7 @@ router.post("/edit", (req, res, next) => {
     // Validation ok, let save it
     req.user.save(function (err) {
       if (err) {
-        res.status(500).json({message: 'Error while saving user into DB.'});
+        res.status(500).json({message: ['Error while saving user into DB.']});
         return;
       }
 

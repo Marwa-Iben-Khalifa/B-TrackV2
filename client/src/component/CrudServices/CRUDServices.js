@@ -1,18 +1,18 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom';
+import srv from '../api/apiServ';
 import { Button, Modal, Form, Row, Alert , Col, InputGroup, Table, Container, Spinner} from 'react-bootstrap';
 import axios from 'axios'
-import Navbar from '../component/navBar/Navbar'
-import Footer from '../component/navBar/Footer'
+import Navbar from '../navs/Navbar'
+import Footer from '../navs/Footer'
 
-import service from '../component/api/service';
 
 
 
 
 export default class CRUDServices extends Component {
   state={
-    user:null,
+    // user:null,
     listOfServices:[],
     show: false,
     dataId:"",
@@ -26,28 +26,29 @@ export default class CRUDServices extends Component {
     connected:false
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if (!prevProps.user._id &&( this.props.user._id ||this.props.user === false)) {
-      this.setState({user:this.props.user})
-      console.log("mise à jours user", this.props.user)
-    }
-  }
+  // componentDidUpdate(prevProps, prevState){
+  //   if (!prevProps.user._id && this.props.user._id) {
+  //     console.log ('componentDidUpdate', this.props.user)
+  //     this.setState({user:{...this.props.user}})
+  //   } 
+  // }
   
   componentDidMount() {
     this.getAllServices();
   }
 
   getAllServices = () =>{
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/services`)
-    .then(responseFromApi => {
+    srv.serviceList()
+    .then(response => {
+      console.log("services list", response)
       this.setState({
-        listOfServices: responseFromApi.data.servicesFromDB
+        listOfServices: response
       })
     })
   }
 
   deleateService=(id)=> {
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/delete-service/${id}`)
+    srv.srv.get(`/delete-service/${id}`)
     .then(
       this.getAllServices()
     )
@@ -72,7 +73,7 @@ export default class CRUDServices extends Component {
     const phone= this.state.phone;
     const email= this.state.email;
     const id = this.state.dataId;
-    service.service.put(`/service/${id}`, {name, phone, email})
+    srv.srv.put(`/service/${id}`, {name, phone, email})
       .then(() => {  
         console.log(`name: ${name} phone:${phone} email:${email}`)
         this.getAllServices()          
@@ -87,9 +88,8 @@ export default class CRUDServices extends Component {
     const name= this.state.name;
     const phone= this.state.phone;
     const email= this.state.email;
-    service.service.post(`/new-service`, {name, phone, email})
+    srv.newService(name, phone, email)
       .then(() => {  
-        console.log(`name: ${name} phone:${phone} email:${email}`)
         this.setState({name: "", phone: "", email: "", errorMessage:[]});
         this.getAllServices()
       })
@@ -101,22 +101,22 @@ export default class CRUDServices extends Component {
     this.setState({name:"", phone:"", email:"", errorMessageEdit:[], errorMessage:[]})
   }
 
-  showContainer = () => {
-    return(
-      <div>
-        <Button variant="primary" disabled>
-          <Spinner
-            as="span"
-            animation="grow"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
-          Loading...
-        </Button>
-      </div>
-    )
-  }
+  // showContainer = () => {
+  //   return(
+  //     <div>
+  //       <Button variant="primary" disabled>
+  //         <Spinner
+  //           as="span"
+  //           animation="grow"
+  //           size="sm"
+  //           role="status"
+  //           aria-hidden="true"
+  //         />
+  //         Loading...
+  //       </Button>
+  //     </div>
+  //   )
+  // }
   
   render() {
     let serv = [...this.state.listOfServices]; // make a copy (prevent mutating if .sort)
@@ -138,14 +138,11 @@ export default class CRUDServices extends Component {
     } 
     console.log("user:",this.props);
 
-    if (this.state.user === null) return this.showContainer()
-    if (this.state.user === false) return <Redirect to="/"/>
-    console.log("upppp:",this.props.updateUser)
-
-
+    // if (this.state.user === null) return this.showContainer()
+    // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container fluid>
-        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border"style={{color: "#300032", fontWeight:"bolder", marginBottom:"60px", height:"100%"}}  >
           <h2 >Services list</h2>
           <Row className="fluid">

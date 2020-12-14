@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import srv from './api/service'
+import srv from '../api/apiServ'
 import { Link, Redirect } from 'react-router-dom';
 import { Button, Modal, Form, Row, Alert , Col, InputGroup, Table, Container, Spinner, FormGroup} from 'react-bootstrap';
-import Navbar from './navBar/Navbar'
-import Footer from './navBar/Footer'
+import Navbar from '../navs/Navbar'
+import Footer from '../navs/Footer'
 
 
 
 export default class userProfil extends Component {
   state={
-    user:null,
     _id:"",
     firstname:"",
     lastname:"",
@@ -25,20 +24,20 @@ export default class userProfil extends Component {
     successMessage : undefined
   }
   
-
-  getAllServices = () =>{
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/findServices`)
-    .then(responseFromApi => {
-      this.setState({
-        listOfServices: responseFromApi.data
-      })
-    })
-  }
-
   componentDidMount() {
     this.getAllServices();
   }
 
+  getAllServices = () =>{
+    srv.serviceList()
+    .then(response => {
+      console.log("services list", response)
+      this.setState({
+        listOfServices: response
+      })
+    })
+  }
+  
   componentDidUpdate(prevProps, prevState){
     if (!prevProps.user._id && this.props.user._id) {
       console.log ('componentDidUpdate', this.props.user)
@@ -73,30 +72,19 @@ export default class userProfil extends Component {
   }
 
   handleFormSubmit = (event) => {
-    const {firstname, lastname, service, role, imageURL} = this.state
+    event.preventDefault();
     console.log("state est : ",this.state)
-    srv.service.put(`/${this.state._id}/edit`, {firstname, lastname, service, role, imageURL})
-    .then((response) => {  
-        this.props.updateUser(response); 
-        this.setState({successMessage: "profile updated successfully" });
-        event.preventDefault();
-        console.log('then', response)     
-    })
-    .catch((error)=> this.setState({errorMessage:error.response.data.message}))
+    srv.edit(this.state.firstname, this.state.lastname, this.state.service, this.state.role, this.state.password, this.state.confirmPassword, this.state.imageURL)
+      .then(response => {
+        this.setState({password: "" , confirmPassword: "", errorMessage:[] , successMessage: "Profil updated successfully" });
+        console.log('user', response)
+        this.props.updateUser(response);
+        this.props.history.push('/profil');
+      })
+      .catch((error)=> this.setState({errorMessage:error.response.data.message}))
     
   }
-  
-  handleFormSubmitPassword = (event) => {
-    event.preventDefault();
-    const {password, confirmPassword} = this.state
-    srv.service.put(`/${this.state._id}/edit-password`, {password, confirmPassword})
-    .then((response) => {
-      this.props.updateUser(response);   
-      this.setState({password:"", confirmPassword: "", errorMessage:[], successMessage: "Password updated successfully"  });
-    })
-    .catch((error)=> {console.log("error:", error.response.data.message)
-  this.setState({errorMessage:error.response.data.message})})
-  }
+
   showContainer = () => {
     return(
       <div>
@@ -114,16 +102,12 @@ export default class userProfil extends Component {
     )
   }
 
-
-  
-
-
   render(){
-    // if (this.state.user === null) return this.showContainer()
+    if (!this.props.user._id) return this.showContainer()
     // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container fluid>
-        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
           <Form.Group as={Row}>
             <h3 className="col-sm-10 mt-1">My Account</h3>
@@ -142,12 +126,9 @@ export default class userProfil extends Component {
             )}
             
             { this.state.successMessage &&
-              <Alert>
+              <div className="alert alert-success alert-dismissible fade show" role="alert">
                 <strong>Awsome!</strong>  {this.state.successMessage}
-                <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </Alert>
+              </div>
             }
 
             <Row>
@@ -224,7 +205,7 @@ export default class userProfil extends Component {
             </Row>
           </Form>
                     
-          <Form className="mt-5  border-top pt-4"  onSubmit={this.handleFormSubmitPassword } onReset={this.handleResetPassword}>
+          <Form className="mt-5  border-top pt-4"  onSubmit={this.handleFormSubmit } onReset={this.handleResetPassword}>
             <Row  md="8">
               <Form.Group as={Col} md="4"  htmlFor="inputPassword">
                 <Form.Label className="mb-3" as={Row}>Password</Form.Label>

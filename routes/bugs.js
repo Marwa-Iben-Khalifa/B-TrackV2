@@ -11,8 +11,13 @@ const routeGuard = require('../configs/route-guard.config');
 
 
 
-// route d'affichege de liste des bugs:
-router.get('/display-bugs', (req, res, next) => {
+// route d'affichege liste de bugs:
+router.get('/bugs', (req, res, next) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: ["You need to be logged in to edit your profile"]});
+    return;
+  }
   Bug.find()
     .populate('rapporter')
     .then(allBugsFromDB => {
@@ -35,9 +40,14 @@ router.get('/display-bugs', (req, res, next) => {
 
 
 // route de supprission de Bug
-router.get('/:id/delete', (req, res, next) => {
+router.get('/bug-remove/:id', (req, res, next) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: ["You need to be logged in to edit your project"]});
+    return;
+  }
   if(!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    res.status(400).json({ message: 'Specified id is not valid' });
+    res.status(400).json({ message: ['Specified id is not valid'] });
     return;
   }
   Bug.findByIdAndRemove(req.params.id)
@@ -50,7 +60,12 @@ router.get('/:id/delete', (req, res, next) => {
 })
 
 // details du bug
-router.get('/:id/details', (req, res, next) => {
+router.get('/details/:id', (req, res, next) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: ["You need to be logged in to edit your project"]});
+    return;
+  }
   Bug.findById(req.params.id)
     .populate('rapporter')
     .populate('solutions.user_id')
@@ -84,11 +99,16 @@ router.get('/:id/details', (req, res, next) => {
 
 
 // ajouter solution
-router.post("/:id/solution",
+router.post("/solution/:id",
   check('solution')
   .notEmpty().withMessage('A solution must not be empty')
   .isLength({ max: 500 }).withMessage('A solution must not exceed 500 chars long.')
   , (req, res, next) => {
+    // Check user is logged in
+    if (!req.user) {
+      res.status(401).json({message: ["You need to be logged in to edit your project"]});
+      return;
+    }
     const user = req.user;
     const bugId = req.params.id;
     const validationErrors = validationResult(req);
@@ -103,12 +123,12 @@ router.post("/:id/solution",
           res.status(201).json(bug)
         })
         .catch(err => {
-          res.status(500).json({ message: 'Saving solution to database went wrong.' });
+          res.status(500).json({ message: ['Saving solution to database went wrong.'] });
         })
     } else {
       Bug.findById(bugId)
         .then(bug => {
-          res.status(400).json({bug, message: validationErrors.errors.map(e => e.msg)});
+          res.status(400).json({bug, errors: validationErrors.errors.map(e => e.msg)});
         })
     }
   }
@@ -116,7 +136,7 @@ router.post("/:id/solution",
 
 
 // Create new bug
-router.post("/create-bug", routeGuard,
+router.post("/new-bug",
   body('description', 'description must not exceed 500 chars long.').isLength({ max: 500 }),
   body('solution', 'solution must not exceed 500 chars long.').isLength({ max: 500 }),
   body('services', 'A bug is associated to one service at least.').notEmpty(),
@@ -124,6 +144,11 @@ router.post("/create-bug", routeGuard,
     .notEmpty().withMessage('Title is mandatory.')
     .isLength({ max: 100 }).withMessage('title must not exceed 100 chars long.')
   , (req, res, next) => {
+    // Check user is logged in
+    if (!req.user) {
+      res.status(401).json({message: ["You need to be logged in to edit your project"]});
+      return;
+    }
     const { title, description, solution, services, status, severity } = req.body;
     const validationErrors = validationResult(req);
     if (validationErrors.isEmpty()) {
@@ -137,7 +162,7 @@ router.post("/create-bug", routeGuard,
         res.status(201).json(newBug)
       })
       .catch(err => {
-        res.status(500).json({ message: 'Saving Bug to database went wrong.' });
+        res.status(500).json({ message: ['Saving Bug to database went wrong.'] });
       })
     } else {
       return res.status(400).json({message: validationErrors.errors.map(e => e.msg)})

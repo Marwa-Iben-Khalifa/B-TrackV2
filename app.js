@@ -13,16 +13,15 @@ const app_name = require('./package.json').name;
 const MongoStore = require('connect-mongo')(session);
 
 mongoose
-  .connect(process.env.DB_CONNECTION ||'mongodb://localhost/b-trackv2', 
-  {useCreateIndex: true,
-  useNewUrlParser: true,
-  useUnifiedTopology: true})
+  .connect(`${process.env.DB_CONNECTION || 'mongodb://localhost/b-trackv2'}`, 
+  {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
   .catch(err => {
     console.error('Error connecting to mongo', err)
   });
+  const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
 
 const app = express();
 
@@ -31,6 +30,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Express View engine setup
+
+app.use(require('node-sass-middleware')({
+  src:  path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public'),
+  sourceMap: true
+}));
 
 // ADD CORS SETTINGS HERE TO ALLOW CROSS-ORIGIN INTERACTION:
 const cors = require('cors');
@@ -53,7 +60,6 @@ app.use('/api', require('./routes/fileUploader'));
 app.use('/api', require('./routes/dashboard'));
 app.use('/api', require('./routes/bugs'));
 app.use('/api', require ('./routes/services'))
-app.use('/api', require ('./routes/user-profil'))
 
 // Serve static files from client/build folder
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -65,35 +71,7 @@ app.use((req, res, next) => {
   })
 });
 
-// const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.')[0]}`);
-
-
-
-
-// Express View engine setup
-
-// app.use(require('node-sass-middleware')({
-//   src:  path.join(__dirname, 'public'),
-//   dest: path.join(__dirname, 'public'),
-//   sourceMap: true
-// }));
-
-//
-// After routes: static server || React SPA
-//
-
-// app.use(express.static(path.join(__dirname, 'client/build')));
-
-// // route not-found => could be a React route => render the SPA
-// app.use((req, res, next) => {
-//   res.sendFile(path.join(__dirname, 'client/build/index.html'), function (err) {
-//     if (err) {
-//       next(err)
-//     }
-//   })
-// });
-
-
+// Middleware error
 app.use((err, req, res, next) => {
   function er2JSON(er) {
     // http://stackoverflow.com/questions/18391212/is-it-not-possible-to-stringify-an-error-using-json-stringify#18391212
@@ -116,18 +94,5 @@ app.use((err, req, res, next) => {
   res.json(err);
 });
 
-
-
-
-
-
-
-// Middleware error
-// app.use((err, req, res, next) => {
-//   // always log the error
-//   console.error('ERROR', req.method, req.path, err);
-
-//   res.json({message: err.message})
-// });
 
 module.exports = app;

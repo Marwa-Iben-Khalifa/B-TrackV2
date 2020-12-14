@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import srv from '../api/service';
-import Navbar from "../navBar/Navbar"
-import Footer from '../navBar/Footer'
+import srv from '../api/apiServ';
+import Navbar from '../navs/Navbar'
+import Footer from '../navs/Footer'
 
 
 import { Button, Modal, Form, Row, Alert, FormControl, Container, Spinner } from 'react-bootstrap';
@@ -32,7 +32,7 @@ export default class BugDetails extends React.Component {
 
   getBugFromApi = () => {
     const { params } = this.props.match;
-    srv.service.get(`/${params.id}/details`)
+    srv.srv.get(`/details/${params.id}`)
       .then(response => {
         console.log('coucou', response.data)
         this.setState({
@@ -60,32 +60,39 @@ export default class BugDetails extends React.Component {
       this.setState({ [name]: target.value });
   }
 
-  showContainer = () => {
-    return(
-      <div>
-        <Button variant="primary" disabled>
-          <Spinner
-            as="span"
-            animation="grow"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
-          Loading...
-        </Button>
-      </div>
-    )
-  }
+  // componentDidUpdate(prevProps, prevState){
+  //   if (!prevProps.user._id && this.props.user._id) {
+  //     console.log ('componentDidUpdate', this.props.user)
+  //     this.setState({user:{...this.props.user}})
+  //   } 
+  // }
+
+  // showContainer = () => {
+  //   return(
+  //     <div>
+  //       <Button variant="primary" disabled>
+  //         <Spinner
+  //           as="span"
+  //           animation="grow"
+  //           size="sm"
+  //           role="status"
+  //           aria-hidden="true"
+  //         />
+  //         Loading...
+  //       </Button>
+  //     </div>
+  //   )
+  // }
 
   handleFormSubmit= (event)=>{
     event.preventDefault();
     const {status, severity, solution}= this.state;
     const { params } = this.props.match;
-    srv.service.post(`/${params.id}/solution`, {status, severity, solution})
+    srv.srv.post(`/solution/${params.id}`, {status, severity, solution})
       .then(() => {
         this.setState({show:false, status: "", severity: "", solution: "",errorMessage:[], });
         this.getBugFromApi() 
-        this.props.history.push(`/${params.id}/bug-details`);
+        // this.props.history.push(`/bug-details/${params.id}`);
         console.log('hello', this.state)
       })
       .catch((error)=> this.setState({errorMessage:error.response.data.message}))
@@ -98,11 +105,11 @@ export default class BugDetails extends React.Component {
   
 
   render() {
-    if (this.props.user === null) return this.showContainer()
-    if (this.props.user === false) return <Redirect to="/"/>
+    // if (this.state.user === null && !this.props.user._id) return this.showContainer()
+    // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container  fluid>
-        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
           <div className="border pl-3 "  >
             <h3 >Bug Overview</h3>
@@ -127,7 +134,7 @@ export default class BugDetails extends React.Component {
             <div className="col-4">Services</div>
             <div className="col-8">                
               {this.state.services.map((el) => (
-                <div>
+                <div key={el._id}>
                   <label className="mb-0">{el.name}</label>
                   <small className=" form-text text-muted mt-0 ">{el.email}</small>
                 </div>

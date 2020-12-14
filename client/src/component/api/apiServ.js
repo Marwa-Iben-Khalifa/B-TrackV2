@@ -4,22 +4,22 @@ import axios from 'axios'
 const errorHandler = err => {
   throw err;
 };
-let service=axios.create({
+let srv=axios.create({
   baseURL: `${process.env.REACT_APP_APIURL || "/api"}`, 
   withCredentials:true
 })
 
 export default{
-  service,
+  srv,
 
   login(email, password) {
-    return this.service.post('/login', {email, password})
+    return this.srv.post('/login', {email, password})
       .then(response => response.data)
       // .catch(errorHandler);
   },
 
   signup(firstname, lastname, service, role, email, password, confirmPassword, imageURL) {
-    return this.service.post('/signup', {
+    return this.srv.post('/signup', {
       firstname, 
       lastname, 
       service, 
@@ -34,24 +34,24 @@ export default{
   },
 
   loggedin() {
-    return this.service.get('/loggedin')
+    return this.srv.get('/loggedin')
       .then(response => response.data)
       .catch(errorHandler);
   },
 
   logout() {
-    return this.service.get('/logout', {})
+    return this.srv.get('/logout', {})
       .then(response => response.data)
       .catch(errorHandler);
   },
 
   edit(firstname, lastname, service, role, password, confirmPassword, imageURL) {
-    return this.service.post('/edit', {
+    return this.srv.post('/edit', {
       firstname, 
       lastname, 
       service, 
       role, 
-      password, 
+      password,
       confirmPassword,
       imageURL
     })
@@ -60,13 +60,13 @@ export default{
   },
 
   upload(formdata) {
-    return this.service.post('/upload', formdata)
+    return this.srv.post('/upload', formdata)
       .then(response => response.data)
       .catch(errorHandler);
   },
 
   newBug(title, description, solution, services, status, severity){
-    return this.service.post('/create-bug', {
+    return this.srv.post('/new-bug', {
       title, 
       description, 
       solution, 
@@ -76,7 +76,28 @@ export default{
     })
     .then(response => response.data)
     .catch(errorHandler);
-  }
+  },
+  
+  bugsList(){
+    return this.srv.get('/bugs')
+    .then(response => response.data)
+    .catch(errorHandler);
+  },
 
+  serviceList(){
+    return this.srv.get('/services')
+    .then(response => response.data)
+    .catch(errorHandler);
+  },
+
+  newService(name, phone, email){
+    return this.srv.post('/new-service',{
+      name, 
+      phone,
+      email
+    })
+    .then(response => response.data)
+    .catch(errorHandler);
+  }
   
 }

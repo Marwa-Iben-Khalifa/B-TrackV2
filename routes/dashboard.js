@@ -9,6 +9,11 @@ const routeGuard = require('../configs/route-guard.config.js');
 const moment = require('moment')
 
 router.get('/repportByStatus', (req, res) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: ["You need to be logged in to edit your profile"]});
+    return;
+  }
 
   Bug.find({})
     .then(result => {
@@ -27,6 +32,11 @@ router.get('/repportByStatus', (req, res) => {
 });
 
 router.get('/repportBySeverity', (req, res) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: ["You need to be logged in to edit your profile"]});
+    return;
+  }
 
   Bug.find({status: ['Confirmed', 'In Progress'] })
     .then(result => {
@@ -46,6 +56,11 @@ router.get('/repportBySeverity', (req, res) => {
 });
 
 router.get('/priority', (req, res) => {
+  // Check user is logged in
+  if (!req.user) {
+    res.status(401).json({message: ["You need to be logged in to edit your profile"]});
+    return;
+  }
 
   Bug.find({severity: 'Critical' , status: ['Confirmed', 'In Progress']} )
     .then(result => {

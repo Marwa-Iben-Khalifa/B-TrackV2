@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import srv from '../api/service'
-import Navbar from "../navBar/Navbar"
-import Footer from "../navBar/Footer"
-
+import srv from '../api/apiServ'
+import Navbar from '../navs/Navbar'
+import Footer from '../navs/Footer'
 import { Link, Redirect } from 'react-router-dom';
 
 import { Button, Form, Row, Alert , Col, Container, FormControl, Spinner} from 'react-bootstrap';
@@ -12,7 +11,7 @@ import { Button, Form, Row, Alert , Col, Container, FormControl, Spinner} from '
 
 export default class NewBug extends Component {
   state={
-    user:null,
+    // user:null,
     title:"",
     description:"",
     solution:"",
@@ -23,30 +22,30 @@ export default class NewBug extends Component {
     errorMessage:[]  
   }
 
-  componentDidUpdate(prevProps, prevState){
-    if (!prevProps.user._id &&( this.props.user._id ||this.props.user === false)) {
-      this.setState({user:this.props.user})
-      console.log("mise à jours user", this.props.user)
-    }
-  }
-
-  getAllServices = () =>{
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/findServices`)
-    .then(responseFromApi => {
-      this.setState({
-        listOfServices: responseFromApi.data
-      })
-    })
-  }
+  // componentDidUpdate(prevProps, prevState){
+  //   if (!prevProps.user._id && this.props.user._id) {
+  //     console.log ('componentDidUpdate', this.props.user)
+  //     this.setState({user:{...this.props.user}})
+  //   } 
+  // }
 
   componentDidMount() {
     this.getAllServices();
   }
 
+  getAllServices = () =>{
+    srv.serviceList()
+    .then(response => {
+      console.log("services list", response)
+      this.setState({
+        listOfServices: response
+      })
+    })
+  }
+
+  
   handleFormSubmit = (event) => {
     event.preventDefault();
-
-
     srv.newBug(this.state.title, this.state.description, this.state.solution, this.state.services, this.state.status, this.state.severity)
     .then((res) => {      
       console.log("ok!")
@@ -72,29 +71,29 @@ export default class NewBug extends Component {
     this.setState({title:"", description:"", solution:"", services: [], status:"", severity:"", errorMessage:[]  })
   }
 
-  showContainer = () => {
-    return(
-      <div>
-        <Button variant="primary" disabled>
-          <Spinner
-            as="span"
-            animation="grow"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
-          Loading...
-        </Button>
-      </div>
-    )
-  }
+  // showContainer = () => {
+  //   return(
+  //     <div>
+  //       <Button variant="primary" disabled>
+  //         <Spinner
+  //           as="span"
+  //           animation="grow"
+  //           size="sm"
+  //           role="status"
+  //           aria-hidden="true"
+  //         />
+  //         Loading...
+  //       </Button>
+  //     </div>
+  //   )
+  // }
 
   render() {
-    if (this.state.user === null) return this.showContainer()
-    if (this.state.user === false) return <Redirect to="/"/>
+    // if (this.state.user === null) return this.showContainer()
+    // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container fluid>
-        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
           {this.state.errorMessage.length > 0 && (
             <div> {this.state.errorMessage.map((el, index)=> 
@@ -180,9 +179,6 @@ export default class NewBug extends Component {
                 
               </Form.Group>
             </Row>
-            
-              
-
 
             <Button type="reset" variant="secondary" >Reset</Button>
             <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i>Save</Button>

@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import service from '../api/service';
-import Navbar from "../navBar/Navbar"
-import Footer from '../navBar/Footer'
-
-
-
+import srv from '../api/apiServ';
+import Navbar from '../navs/Navbar'
+import Footer from '../navs/Footer'
 import { Button, Form,  Row, Container, Table, InputGroup, Spinner} from 'react-bootstrap';
 
 import { Link, Redirect } from 'react-router-dom';
@@ -13,21 +10,21 @@ import { Link, Redirect } from 'react-router-dom';
 
 export default class BugsList extends Component {
   state={
-    user: null,
+    // user: null,
     bugs:[],
     sortby:"",
     query:""
   };
 
-  componentDidUpdate(prevProps, prevState){
-    if (!prevProps.user._id &&( this.props.user._id ||this.props.user === false)) {
-      this.setState({user:this.props.user})
-      console.log("mise à jours user", this.props.user)
-    }
-  }
+  // componentDidUpdate(prevProps, prevState){
+  //   if (!prevProps.user._id && this.props.user._id) {
+  //     console.log ('componentDidUpdate', this.props.user)
+  //     this.setState({user:{...this.props.user}})
+  //   } 
+  // }
 
   deleateBug=(id)=> {
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/${id}/delete`)
+    srv.srv.get(`/bug-remove/${id}`)
     .then(
       this.getBugsFromApi()
     )
@@ -41,8 +38,7 @@ export default class BugsList extends Component {
   }
   
   getBugsFromApi = () =>{
-    service.service.get(`/display-bugs`)
-    
+    srv.srv.get(`/bugs`)
     .then(response => {
       this.setState({
         bugs: response.data
@@ -54,22 +50,22 @@ export default class BugsList extends Component {
     this.getBugsFromApi();
   }
 
-  showContainer = () => {
-    return(
-      <div>
-        <Button variant="primary" disabled>
-          <Spinner
-            as="span"
-            animation="grow"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
-          Loading...
-        </Button>
-      </div>
-    )
-  }
+  // showContainer = () => {
+  //   return(
+  //     <div>
+  //       <Button variant="primary" disabled>
+  //         <Spinner
+  //           as="span"
+  //           animation="grow"
+  //           size="sm"
+  //           role="status"
+  //           aria-hidden="true"
+  //         />
+  //         Loading...
+  //       </Button>
+  //     </div>
+  //   )
+  // }
 
 
   render() {
@@ -102,11 +98,11 @@ export default class BugsList extends Component {
       bugsList = bugsList.filter(b => b.bug.title.includes(query))
     } }
     console.log(this.props.updateUser)
-    // if (this.state.user === null) return this.showContainer()
+    // if (this.state.user === null && !this.props.user._id) return this.showContainer()
     // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container fluid>
-        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border"style={{ color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
           <h2 >Bugs list</h2>
           <Row className="fluid">
@@ -165,7 +161,7 @@ export default class BugsList extends Component {
                   <td className="d-flex flex-row-reverse" style={{border: "none"}}>
                     <Button variant="danger" onClick={(event)=>{this.deleateBug(el.bug._id)}}><i
                       className="fas fa-trash-alt"></i></Button>
-                    <Link to={`/${el.bug._id}/bug-details`}><Button  variant="info"><i className="fas fa-eye"></i></Button></Link>
+                    <Link to={`/bug-details/${el.bug._id}`}><Button  variant="info"><i className="fas fa-eye"></i></Button></Link>
                   </td>
                 </tr>
               ))}

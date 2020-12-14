@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import service from '../api/service';
+import srv from '../api/apiServ';
 import { Redirect, Link } from 'react-router-dom';
 import {Container, Button, Spinner, Row, Col, Table, Card} from 'react-bootstrap'
-import Navbar from "../navBar/Navbar"
-import Footer from '../navBar/Footer'
+import Navbar from "../navs/Navbar"
+import Footer from '../navs/Footer'
 import {Pie, Doughnut, Polar} from 'react-chartjs-2';
 
 
 export default class Dashboard extends Component {
   state={
-    priorityBugs:null,
+    // user:null,
+    priorityBugs:[],
     dataByStatus:{labels: [],
                   datasets: [
                     {
@@ -38,15 +39,22 @@ export default class Dashboard extends Component {
     this.getPriorityBugs();
   }
 
+  // componentDidUpdate(prevProps, prevState){
+  //   if (!prevProps.user._id && this.props.user._id) {
+  //     console.log ('componentDidUpdate', this.props.user)
+  //     this.setState({user:{...this.props.user}})
+  //   } 
+  // }
+
   getPriorityBugs = () =>{
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/priority`)
+    srv.srv.get(`/priority`)
     .then(responseFromApi => {
       this.setState({priorityBugs: responseFromApi.data.result})
     })
   }
 
   getDataByStatus = () =>{
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/repportByStatus`)
+    srv.srv.get(`/repportByStatus`)
     .then(responseFromApi => {
       this.setState({dataByStatus:{
         labels: responseFromApi.data.bugs.bugTypes,
@@ -67,7 +75,7 @@ export default class Dashboard extends Component {
   }
   
   getDataBySeverity = () =>{
-    axios.get(`${process.env.REACT_APP_APIURL || ""}/repportBySeverity`)
+    srv.srv.get(`/repportBySeverity`)
     .then(responseFromApi => {
       this.setState({dataBySeverity:{
         labels: responseFromApi.data.bugs.bugTypes,
@@ -91,29 +99,32 @@ export default class Dashboard extends Component {
 
   
 
-  showContainer = () => {
-    return(
-      <div>
-        <Button variant="primary" disabled>
-          <Spinner
-            as="span"
-            animation="grow"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />
-          Loading...
-        </Button>
-      </div>
-    )
-  }
+  // showContainer = () => {
+  //   return(
+  //     <div>
+  //       <Button variant="primary" disabled>
+  //         <Spinner
+  //           as="span"
+  //           animation="grow"
+  //           size="sm"
+  //           role="status"
+  //           aria-hidden="true"
+  //         />
+  //         Loading...
+  //       </Button>
+  //     </div>
+  //   )
+  // }
 
   render() {
-    if (this.state.dataByStatus.labels.length === 0 || this.state.dataByStatus.labels.length === 0 || this.state.priorityBugs=== null) return this.showContainer()
+    // if (this.state.dataByStatus.labels.length === 0 || this.state.dataByStatus.labels.length === 0 || this.state.priorityBugs=== null) return this.showContainer()
+    // if (this.props.user === {} &&  this.state.user === null) return <Redirect to="/"/>
+    // if (this.state.user === null) return this.showContainer()
+    
     console.log("State", this.state)
     return (
       <Container fluid >
-        <Navbar user={this.props.user} updateUser={this.props.updateUser}/>
+        <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container fluid style={{textAlign:"left" ,marginBottom:"60px", height:"100%" , color: "#300032", fontWeight:"bolder"}}>
           <div >
             <Card
@@ -167,7 +178,7 @@ export default class Dashboard extends Component {
                   <ul key={el._id}>
                     <li >
                       <i style={{color:"red"}} className="fas fa-exclamation-triangle"></i>
-                      <Link to={`/${el._id}/bug-details`} style={{color: "black"}}>{el.title}</Link>
+                      <Link to={`/bug-details/${el._id}`} style={{color: "black"}}>{el.title}</Link>
                     </li>
                   </ul>
                   ))} 
