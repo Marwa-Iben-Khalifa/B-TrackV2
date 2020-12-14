@@ -12,9 +12,7 @@ import 'react-vertical-timeline-component/style.min.css';
 import './index.css';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Router><App /></Router>,
   document.getElementById('root')
 );
 

@@ -1,54 +1,46 @@
 import React, { Component } from 'react'
 import { Link , Redirect} from 'react-router-dom';
-
+import {Container, Button, Spinner, Row, Col, Table, Card} from 'react-bootstrap'
 
 export default class Details extends React.Component  {
-  constructor(props){
-      super(props);
-      this.state = { 
-      }
-  }
-
+  
   render() {
     return (
-      <>
-        <div class="row d-flex justify-content-around"  >
+      <Container fluid>
+        <Row className="d-flex justify-content-around"  >  
           <div style={{marginTop:"50px"}}>
-            <div class="rounded-circle" >
-              <div class="card-body">
-                <h5 class="card-title" style={{fontWeight:"bold"}}>what is B-Track ? </h5>
-                <p class="card-text" >With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn" style={{backgroundColor:"#3f51b552", borderRadius:"10px", fontWeight:"bold"}}>Learn more</a>
-              </div>
+            <div>
+              <Card.Body >
+                <Card.Title style={{fontWeight:"bold"}}>B-Track ? </Card.Title>
+                <Card.Text >With supporting text below as a natural lead-in to additional content.</Card.Text>
+                <a href="#" className="btn" style={{backgroundColor:"#3f51b552", borderRadius:"10px", fontWeight:"bold"}}>Learn more</a>
+              </Card.Body>
             </div>
           </div>
-          <div> 
-            <div class="rounded-circle" style={{marginTop:"50px"}}>
-              <div class="card-body">
-                <h5 class="card-title" style={{fontWeight:"bold"}}>How does it work?</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn" style={{backgroundColor:"#3f51b552", borderRadius:"10px", fontWeight:"bold"}}>Learn more</a>
-              </div>
+          
+          <div style={{marginTop:"50px"}}> 
+            <div>
+              <Card.Body>
+                <Card.Title style={{fontWeight:"bold"}}>How?</Card.Title>
+                <Card.Text>With supporting text below as a natural lead-in to additional content.</Card.Text>
+                <a href="#" className="btn" style={{backgroundColor:"#3f51b552", borderRadius:"10px", fontWeight:"bold"}}>Learn more</a>
+              </Card.Body>
             </div>
           </div>
-          <div>
-            <div class="rounded-circle" style={{marginTop:"50px"}}>
-              <div class="card-body">
-                <h5 class="card-title" style={{fontWeight:"bold"}}>About us</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn" style={{backgroundColor:"#3f51b552", borderRadius:"10px", fontWeight:"bold"}}>Learn more</a>
-              </div>
+
+          <div style={{marginTop:"50px"}}>
+            <div>
+              <Card.Body>
+                <Card.Title style={{fontWeight:"bold"}}>About Us?</Card.Title>
+                <Card.Text>With supporting text below as a natural lead-in to additional content.</Card.Text>
+                <a href="#" className="btn" style={{backgroundColor:"#3f51b552", borderRadius:"10px", fontWeight:"bold"}}>Learn more</a>
+              </Card.Body>
             </div>
           </div>
-        </div>
 
-      </>
-      )}
+        </Row>
 
-
-
-
-
-
-
+      </Container>
+    )
+  }
 }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css';
 
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {Switch, Route} from 'react-router-dom';
 import { Button, Container } from 'react-bootstrap';
 
 import Welcome from './component/auth/Welcome'
@@ -43,10 +43,8 @@ export default class App extends Component {
 
   render(){
   return (
-    <div className="App" style= {{background: "#3f51b50d" }}>
-      <BrowserRouter>          
       <Route render={props => (
-      <div className="App" data-route={props.location.pathname}> {/* data-route="/" allow us to style pages */}
+      <div className="App" data-route={props.location.pathname} style= {{background: "#3f51b50d" }}> {/* data-route="/" allow us to style pages */}
 
         <Switch>
           <Route exact path="/" render={(props) => (
@@ -91,7 +89,5 @@ export default class App extends Component {
         </Switch>
       </div>
     )} />
-      </BrowserRouter>    
-    </div>
   )}
 }

@@ -5,7 +5,7 @@ const errorHandler = err => {
   throw err;
 };
 let service=axios.create({
-  baseURL: `${process.env.REACT_APP_APIURL || ""}`, 
+  baseURL: `${process.env.REACT_APP_APIURL || "/api"}`, 
   withCredentials:true
 })
 
