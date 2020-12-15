@@ -24,7 +24,7 @@ export default class NavBar extends Component {
         { !this.props.user._id  ?(
           <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" >
             {/* <Redirect to="/"/> */}
-            <Navbar.Brand href="#home"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
+            <Navbar.Brand href="/"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mr-auto" >
@@ -37,7 +37,7 @@ export default class NavBar extends Component {
         :
         (
           <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{textAlign:"left"}}>
-            <Navbar.Brand href="#home"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
+            <Navbar.Brand href="/dashboard"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mr-auto" >

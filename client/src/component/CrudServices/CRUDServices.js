@@ -12,7 +12,7 @@ import Footer from '../navs/Footer'
 
 export default class CRUDServices extends Component {
   state={
-    // user:null,
+    user:null,
     listOfServices:[],
     show: false,
     dataId:"",
@@ -26,12 +26,12 @@ export default class CRUDServices extends Component {
     connected:false
   }
 
-  // componentDidUpdate(prevProps, prevState){
-  //   if (!prevProps.user._id && this.props.user._id) {
-  //     console.log ('componentDidUpdate', this.props.user)
-  //     this.setState({user:{...this.props.user}})
-  //   } 
-  // }
+  componentDidUpdate(prevProps, prevState){
+    if (!prevProps.user._id && this.props.user._id) {
+      console.log ('componentDidUpdate', this.props.user)
+      this.setState({user:{...this.props.user}})
+    } 
+  }
   
   componentDidMount() {
     this.getAllServices();
@@ -101,22 +101,22 @@ export default class CRUDServices extends Component {
     this.setState({name:"", phone:"", email:"", errorMessageEdit:[], errorMessage:[]})
   }
 
-  // showContainer = () => {
-  //   return(
-  //     <div>
-  //       <Button variant="primary" disabled>
-  //         <Spinner
-  //           as="span"
-  //           animation="grow"
-  //           size="sm"
-  //           role="status"
-  //           aria-hidden="true"
-  //         />
-  //         Loading...
-  //       </Button>
-  //     </div>
-  //   )
-  // }
+  showContainer = () => {
+    return(
+      <div>
+        <Button variant="primary" disabled>
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          Loading...
+        </Button>
+      </div>
+    )
+  }
   
   render() {
     let serv = [...this.state.listOfServices]; // make a copy (prevent mutating if .sort)
@@ -136,10 +136,8 @@ export default class CRUDServices extends Component {
     if (query) {
       serv = serv.filter(service => service.name.includes(query))
     } 
-    console.log("user:",this.props);
 
-    // if (this.state.user === null) return this.showContainer()
-    // if (this.state.user === false) return <Redirect to="/"/>
+    if (this.state.user === null) return this.showContainer()
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
@@ -217,9 +215,9 @@ export default class CRUDServices extends Component {
                   placeholder="Mail" value={this.state.email} onChange={this.handleChange}/>
               </Col>
                     
-              <Col sm className="d-flex flex-row-reverse">
+              <Col sm className="d-flex flex-row-reverse">                
+                <Button type="reset" variant="danger" ><i className="fas fa-trash-alt "></i></Button>
                 <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i></Button>
-                <Button type="reset" variant="secondary" ><i className="fas fa-trash-alt "></i></Button>
               </Col>
             </Row>
           </Form>

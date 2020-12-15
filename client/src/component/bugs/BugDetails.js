@@ -60,29 +60,29 @@ export default class BugDetails extends React.Component {
       this.setState({ [name]: target.value });
   }
 
-  // componentDidUpdate(prevProps, prevState){
-  //   if (!prevProps.user._id && this.props.user._id) {
-  //     console.log ('componentDidUpdate', this.props.user)
-  //     this.setState({user:{...this.props.user}})
-  //   } 
-  // }
+  componentDidUpdate(prevProps, prevState){
+    if (!prevProps.user._id && this.props.user._id) {
+      console.log ('componentDidUpdate', this.props.user)
+      this.setState({user:{...this.props.user}})
+    } 
+  }
 
-  // showContainer = () => {
-  //   return(
-  //     <div>
-  //       <Button variant="primary" disabled>
-  //         <Spinner
-  //           as="span"
-  //           animation="grow"
-  //           size="sm"
-  //           role="status"
-  //           aria-hidden="true"
-  //         />
-  //         Loading...
-  //       </Button>
-  //     </div>
-  //   )
-  // }
+  showContainer = () => {
+    return(
+      <div>
+        <Button variant="primary" disabled>
+          <Spinner
+            as="span"
+            animation="grow"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+          Loading...
+        </Button>
+      </div>
+    )
+  }
 
   handleFormSubmit= (event)=>{
     event.preventDefault();
