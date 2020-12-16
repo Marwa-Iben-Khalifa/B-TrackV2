@@ -259,8 +259,8 @@ export default class CRUDServices extends Component {
               </Form.Group>              
             </Modal.Body>
             <Modal.Footer>
-              <Button type="reset" variant="secondary" >Reset</Button>
-              <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i>Save</Button>
+              <Button type="reset" variant="danger" >Reset</Button>
+              <Button type="submit" variant="info"><i className=" mr-1 far fa-save"></i>Save</Button>
             </Modal.Footer>
           </Form>   
         </Modal>

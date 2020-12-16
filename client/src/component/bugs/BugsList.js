@@ -104,7 +104,7 @@ export default class BugsList extends Component {
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border"style={{textAlign:"center", color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
-          <h2 >Bugs list</h2>
+          <h2 style={{textAlign:"left"}}>Bugs list</h2>
           <Row className="fluid">
             <Form.Control as="select"
               className="col-md-1 md-form"

@@ -17,6 +17,7 @@ import { Redirect } from 'react-router-dom';
 
 export default class BugDetails extends React.Component {
   state = {
+    user:null,
     bug: "",
     rapportedAt: "",
     solutions: [],
@@ -105,7 +106,7 @@ export default class BugDetails extends React.Component {
   
 
   render() {
-    // if (this.state.user === null && !this.props.user._id) return this.showContainer()
+    if (this.state.user === null && !this.props.user._id) return this.showContainer()
     // if (this.state.user === false) return <Redirect to="/"/>
     return (
       <Container  fluid>
@@ -171,10 +172,10 @@ export default class BugDetails extends React.Component {
           
           <Row className="mb-2">
             <div className="col-12">
-              <button className=" mt-3 btn btn-secondary" data-target="#addSolutionModal" 
+              <Button className=" mt-3" variant="info" data-target="#addSolutionModal" 
                 data-id="bugId0001" onClick={()=> this.setState({show:true})}> 
                 <i className="far fa-edit"></i> Add solution
-              </button>
+              </Button>
             </div>
           </Row>
 
@@ -192,12 +193,17 @@ export default class BugDetails extends React.Component {
                         className="vertical-timeline-element--laravel VerticalTimelineElement vertical-timeline-element "
                         contentStyle={{ background: 'rgb(64, 81, 182, 0.25)' }}
                         contentArrowStyle={{ borderRight: '7px solid  rgb(64, 81, 182, 0.25)' }}
-                        date={<p>{el.date.rapportDayS}, {el.date.rapportTimeS}</p>}
+                        date={<p className="vertical-timeline-element-title">{el.date.rapportDayS}, {el.date.rapportTimeS}<h5>By {el.s.user_id.firstname} {el.s.user_id.lastname}</h5></p>}
                         key={el.s._id}
                         icon={<img src={el.s.user_id.imageURL} className="material-icons md-18" style={{ borderRadius: "50%", position: "absolute", top: "0", left:"0"  }} width="60" height="60" alt="" />}
                         >
-                        <h4 className="vertical-timeline-element-title">{el.s.user_id.firstname} {el.s.user_id.lastname}</h4>
-                        <h5 className="vertical-timeline-element-subtitle">Status: {el.s.status}</h5>
+                        {el.s.status==="Confirmed" ? 
+                          <div style={{display:"flex"}}><h5>Status:</h5><h5 className="vertical-timeline-element-subtitle" style={{color:"red"}}> {el.s.status}</h5></div>
+                          : el.s.status==="In Progress" ?
+                          <div style={{display:"flex"}}><h5>Status:</h5><h5 className="vertical-timeline-element-subtitle" style={{color:"orange"}}>{el.s.status}</h5></div>
+                          :
+                          <div style={{display:"flex"}}><h5>Status:</h5><h5 className="vertical-timeline-element-subtitle" style={{color:"green"}}>{el.s.status}</h5></div>
+                        }
                         <p>
                           {el.s.solution}
                         </p>

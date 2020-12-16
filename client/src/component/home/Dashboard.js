@@ -52,9 +52,9 @@ export default class Dashboard extends Component {
         labels: responseFromApi.data.bugs.bugTypes,
         datasets: [{label: 'Status',
                     backgroundColor: [
-                      '#FF6699',
-                      '#FF9933',
-                      '#CCFF33'
+                    '#FF6699',
+                    '#FF9933',
+                    '#CCFF33'
                     ],
                     hoverBackgroundColor: [
                     '#CC3366',
@@ -123,7 +123,7 @@ export default class Dashboard extends Component {
               >
               <Card.Header>Charts</Card.Header>
               <Card.Body>
-                <Polar   height={100}
+                <Doughnut   height={100}
                   data={this.state.dataByStatus}
                   options={{
                     title:{
@@ -138,7 +138,7 @@ export default class Dashboard extends Component {
                   }}
                 />
   
-                <Polar   height={100}
+                <Doughnut   height={100}
                   data={this.state.dataBySeverity}
                   options={{
                     title:{
