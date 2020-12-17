@@ -1,6 +1,5 @@
-body{
-  font-family: ubuntu-bold;
-}
+
+
 .row.s {
   display: -ms-flexbox;
   display: flex;
@@ -27,4 +26,44 @@ body{
   width: 100%;
   padding-right: 5px;
   padding-left: 5px;
+}
+@media(min-width:800px){
+  #aboutUS .marwa-and-wafaa{
+    display: flex;
+    text-align: center;
+}
+}
+
+#aboutUS .marwa-and-wafaa{
+  text-align: center;
+  justify-content: space-around;
+  padding-top: 9%;
+}
+
+.marwa-and-wafaa img{
+  background: #3f51b50d
+}
+
+.marwa .wafaa{
+  flex:1
+}
+
+@media(min-width:800px){
+  #stats{
+    display: flex;
+    justify-content: space-around;
+  }
+  #stats canvas {    
+    width: 30vw!important;
+    object-fit: cover;
+    height: 30vw!important;}
+}
+#stats{
+  padding-top:15px;
+}
+li{
+  list-style:none;
+}
+#criticalBugs{
+  padding-left: 10px;
 }

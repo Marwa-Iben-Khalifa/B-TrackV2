@@ -103,8 +103,8 @@ export default class BugsList extends Component {
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
-        <Container className="border"style={{textAlign:"center", color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
-          <h2 style={{textAlign:"left"}}>Bugs list</h2>
+        <Container className="border"style={{textAlign:"center", fontWeight:"bolder", paddingTop:"15px"}}>
+          <h2 style={{textAlign:"left", fontWeight:"bold"}}>Bugs list</h2>
           <Row className="fluid">
             <Form.Control as="select"
               className="col-md-1 md-form"
@@ -127,18 +127,18 @@ export default class BugsList extends Component {
           <Table striped bordered hover responsive="sm">
             <thead>
               <tr>
-                <th>Title</th>
-                <th>Rapporter</th>
-                <th>Severity</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th><h4>Title</h4></th>
+                <th><h4>Rapporter</h4></th>
+                <th><h4>Severity</h4></th>
+                <th><h4>Status</h4></th>
+                <th><h4>Actions</h4></th>
               </tr>
             </thead>
             <tbody>
               {bugsList.map((el)=>(
                 <tr key={el.bug._id}>
-                  <td>{el.bug.title}</td>
-                  <td>{el.bug.rapporter.firstname} {el.bug.rapporter.lastname}
+                  <td><h5>{el.bug.title}</h5></td>
+                  <td><h5>{el.bug.rapporter.firstname} {el.bug.rapporter.lastname}</h5>
                     <small className="text-secondary form-text text-muted mt-0"> {el.bug.rapporter.email}</small>
                     <small className="text-secondary form-text text-muted mt-0">{el.rapportedAt.rapportDay} at
                       {el.rapportedAt.rapportTime}</small>
@@ -153,10 +153,10 @@ export default class BugsList extends Component {
                   }
                   
                   {el.bug.status=== "Confirmed"  ?
-                    <td style={{color:"red"}}>{el.bug.status}</td>
+                    <td style={{color:"red"}}><h5>{el.bug.status}</h5></td>
                   : el.bug.status=== "In Progress" ?
-                  <td style={{color:"orange"}}>{el.bug.status}</td>
-                  : <td style={{color:"green"}}>{el.bug.status}</td>
+                  <td style={{color:"orange"}}><h5>{el.bug.status}</h5></td>
+                  : <td style={{color:"green"}}><h5>{el.bug.status}</h5></td>
                   }
                   <td className="d-flex flex-row-reverse" style={{border: "none"}}>
                     <Button variant="danger" onClick={(event)=>{this.deleateBug(el.bug._id)}}><i

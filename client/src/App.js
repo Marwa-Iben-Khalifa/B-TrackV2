@@ -10,6 +10,7 @@ import NewBug from './component/bugs/NewBug'
 import BugsList from './component/bugs/BugsList'
 import BugDetails from './component/bugs/BugDetails'
 import UserProfil from './component/auth/User-profil'
+import AboutUs from './component/home/AboutUs'
 
 
 export default class App extends Component {
@@ -56,11 +57,15 @@ export default class App extends Component {
   render() {
     return (
       <Route render={props => (
-        <div className="App"  style= {{background: "#3f51b50d" }}> {/* data-route="/" allow us to style pages */}
+        <div className="App" > {/* data-route="/" allow us to style pages */}
 
           <Switch>
             <Route exact path="/" render={(props) => (
-              <Welcome user={this.state.user} />
+              <Welcome user={this.state.user} updateUser={this.updateUser} history={props.history} />
+            )} />
+
+            <Route exact path="/aboutUs" render={(props) => (
+              <AboutUs user={this.state.user} updateUser={this.updateUser} history={props.history} />
             )} />
 
             <Route exact path="/dashboard" render={(props) => (

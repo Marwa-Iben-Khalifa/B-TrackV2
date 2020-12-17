@@ -111,9 +111,9 @@ export default class BugDetails extends React.Component {
     return (
       <Container  fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
-        <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
+        <Container className="border" style={{textAlign:"left", fontWeight:"bolder", paddingTop:"15px"}}>
           <div className="border pl-3 "  >
-            <h3 >Bug Overview</h3>
+            <h2 style={{fontWeight:"bold"}}>Bug Overview</h2>
           </div>
           <Row className="my-2">
             <div className="col-4">Title</div>

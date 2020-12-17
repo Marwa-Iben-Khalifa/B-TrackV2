@@ -37,7 +37,7 @@ export default class NavBar extends Component {
         ) 
         :
         (
-          <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{textAlign:"left"}}>
+          <Navbar sticky="top" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{textAlign:"left", fontSize:"20px"}}>
             <Navbar.Brand href="/dashboard"><img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1608063629/Untitled_design_1_b02fpe.png" style={{height: '50px'}} alt="" /></Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">

@@ -110,7 +110,7 @@ export default class userProfil extends Component {
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
           <Form.Group as={Row}>
-            <h3 className="col-sm-10 mt-1">My Account</h3>
+            <h2 style={{textAlign:"left", fontWeight:"bold"}} className="col-sm-10 mt-1">My Account</h2>
             <small className="text-secondary form-text text-muted mt-0">
               Fill your modifications here
             </small>

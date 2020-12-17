@@ -141,8 +141,8 @@ export default class CRUDServices extends Component {
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
-        <Container className="border"style={{color: "#300032", fontWeight:"bolder", marginBottom:"60px", height:"100%"}}  >
-          <h2 >Services list</h2>
+        <Container className="border"style={{ fontWeight:"bolder", paddingTop:"15px"}}  >
+          <h2 style={{fontWeight:"bold"}}>Services list</h2>
           <Row className="fluid">
             <Form.Control as="select"
               className="col-md-1 md-form"
@@ -164,19 +164,19 @@ export default class CRUDServices extends Component {
           <Table striped bordered hover responsive="sm" >
             <thead>
               <tr>
-                <td>Name</td>
-                <td>Phone</td>
-                <td>E-mail</td>
-                <td>Action</td>
+                <td><h4>Name</h4></td>
+                <td><h4>Phone</h4></td>
+                <td><h4>E-mail</h4></td>
+                <td><h4>Action</h4></td>
               </tr>
             </thead>
             <tbody>
               {serv.map( service => {
                 return (
                 <tr key={service._id}>
-                  <td>{service.name}</td>
-                  <td>{service.phone}</td>
-                  <td>{service.email}</td>
+                  <td><h5>{service.name}</h5></td>
+                  <td><h5>{service.phone}</h5></td>
+                  <td><h5>{service.email}</h5></td>
                   <td className="d-flex flex-row-reverse">
                     <Button variant="danger" onClick={(event)=>{this.deleateService( service._id)}}>
                       <i className="fas fa-trash-alt" ></i></Button>
@@ -216,7 +216,7 @@ export default class CRUDServices extends Component {
               </Col>
                     
               <Col sm className="d-flex flex-row-reverse">                
-                <Button type="reset" variant="danger" ><i className="fas fa-trash-alt "></i></Button>
+                <Button type="reset" variant="secondary" >Reset</Button>
                 <Button type="submit" variant="primary"><i className=" mr-1 far fa-save"></i></Button>
               </Col>
             </Row>

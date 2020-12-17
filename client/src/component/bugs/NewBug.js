@@ -94,7 +94,7 @@ export default class NewBug extends Component {
     return (
       <Container fluid>
         <Navbar user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
-        <Container className="border" style={{textAlign:"left" , color: "#300032", fontWeight:"bolder", marginBottom:"60px"}}>
+        <Container className="border" style={{textAlign:"left" , paddingTop:"15px", fontWeight:"bolder"}}>
           {this.state.errorMessage.length > 0 && (
             <div> {this.state.errorMessage.map((el, index)=> 
               (
@@ -105,7 +105,7 @@ export default class NewBug extends Component {
           <Form onSubmit={this.handleFormSubmit} onReset={this.handleReset}>
 
             <Form.Group as={Row}>
-              <h3 className="col-sm-10 mt-1" >New Bug</h3>
+              <h2 style={{textAlign:"left", fontWeight:"bold"}} className="col-sm-10 mt-1" >New Bug</h2>
               <small className="text-secondary form-text text-muted mt-0">
                 Fill all the fields then click on Add in order to create a new bug.
               </small>

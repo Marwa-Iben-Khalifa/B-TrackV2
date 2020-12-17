@@ -128,7 +128,7 @@ export default class Signup extends Component {
             <Row className="row s">
               <FormGroup className="md-form  form-control signEmail" style={{border:"none"}}>
                 <i className="fa fa-envelope prefix grey-text"></i>
-                <input type="email" name="email" placeholder="Email adress" className=" validate " id="inputEmail"  value={this.state.email} onChange={this.handleChange}  />
+                <input type="email" name="email" placeholder="Email address" className=" validate " id="inputEmail"  value={this.state.email} onChange={this.handleChange}  />
                 <label data-error="wrong" data-success="right" htmlFor="inputEmail"></label>
               </FormGroup>
             </Row>

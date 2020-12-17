@@ -9,12 +9,10 @@ import Footer from '../navs/Footer'
 export default class Welcome extends Component {
 
   render() {
-    // console.log(this.props.user)      
-    // {this.props.user._id && <Redirect to="/dashboard" user={this.props.user}/>}
 
     return (
-      <div style={{marginBottom:"60px", height:"100%", textAlign: "center"}}>
-        <Navbar  user={this.props.user}/>
+      <div style={{textAlign: "center"}}>
+        <Navbar  user={this.props.user} updateUser={this.props.updateUser} history={this.props.history}/>
         <Jumbotron fluid className="mb-5">
           <Container fluid>            
             <img src="https://res.cloudinary.com/dshuazgaz/image/upload/v1605986441/image_9_l2l4wb.png" style={{height: '180px'}} alt="" />
